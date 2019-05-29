@@ -179,11 +179,14 @@ var Tab = {
 				initScrollState();
 			});
 		} else {
+
 			$('#tab_' + index).trigger('click');
-			$('.tab_iframe').attr('src', $('.tab_iframe').attr('src'));
+
 		}
 		// 关闭侧边栏
 		$('#guide').trigger(click);
+
+
 	},
 	closeTab: function($item) {
 		var closeable = $item.data('closeable');
