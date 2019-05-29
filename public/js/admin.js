@@ -180,6 +180,7 @@ var Tab = {
 			});
 		} else {
 			$('#tab_' + index).trigger('click');
+			$('.tab_iframe').attr('src', $('.tab_iframe').attr('src'));
 		}
 		// 关闭侧边栏
 		$('#guide').trigger(click);
@@ -255,4 +256,5 @@ $(document).ready(function () {
     $('.system_menus').hide(0, function () {
         $('.system_' + localStorage.getItem('role')).show();
     });
+
 });

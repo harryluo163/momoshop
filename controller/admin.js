@@ -225,13 +225,13 @@ exports.userGetTransactionRecord=function (req,res) {
         sqlParams2+=" and orders.createBy= '"+userId+"' "
     }
     if(select!=""&&select!=undefined){
-        sqlParams2+=" and ( goods like '%"+select+"%' or remark like '%"+select+"%')"
+        sqlParams2+=" and ( goods like '%"+select+"%' )"
     }
     if(eDate!=""&&eDate!=undefined){
         sqlParams2+=" and endDate <'"+eDate+" 23:59:59' "
     }
     if(req.query.roomId!=""&&req.query.roomId!=undefined){
-        sqlParams2+=" and room like '%"+req.query.roomId+"%' "
+        sqlParams2+=" and ( room like '%"+req.query.roomId+"%' or remark like '%"+req.query.roomId+"%') "
     }
     let sqlParams=[offset,limit];
     var sql ='select count(*) as total ' +
