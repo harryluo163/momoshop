@@ -159,26 +159,31 @@ exports.addTransactionRecord=function (req,res) {
                         return;
                     }
 
-                    let goodstr=goodName+' '+timeType+' '+singlePrice+'积分';
-                    let sqlParams=[id,roomId,goodstr,num,num*singlePrice,createBy,createAt,endDate, id, roomId];
-                    conn.query(sqlStr.addTransactionRecord,sqlParams,(err,rows)=>{
-                        if(err){
-                            conn.rollback(function () { });
-                            res.json({error:err});
-                            return;
-                        }
-
-                        conn.commit(function(err) {
-                            if (err) {
+                    conn.query("select coin from user where id = '"+createBy+"'",(err,rows)=> {
+                        let coin_my=rows[0].coin
+                        let goodstr=goodName+' '+timeType+' '+singlePrice+'积分';
+                        let sqlParams=[id,roomId,goodstr,num,num*singlePrice,createBy,createAt,endDate,coin_my];
+                        conn.query(sqlStr.addTransactionRecord,sqlParams,(err,rows)=>{
+                            if(err){
                                 conn.rollback(function () { });
-                                res.json({error: '购买错误'});
-                            } else {
-                                mqtt.sendAddOrder(req.body.roomId);
-                                res.json({error:null});
+                                res.json({error:err});
+                                return;
                             }
+
+                            conn.commit(function(err) {
+                                if (err) {
+                                    conn.rollback(function () { });
+                                    res.json({error: '购买错误'});
+                                } else {
+                                    mqtt.sendAddOrder(req.body.roomId);
+                                    res.json({error:null});
+                                }
+                            });
+
                         });
 
-                    });
+                    })
+
                 })
             })
 
@@ -216,8 +221,11 @@ exports.userGetTransactionRecord=function (req,res) {
     let offset=parseInt(req.query.offset==undefined?0:req.query.offset),limit=parseInt(req.query.limit==undefined?10:req.query.limit),userId=req.query.id,select=req.query.select,eDate=req.query.eDate;
    
     var sqlParams2=" and 1=1 "
+    if(userId!=""&&userId!=undefined){
+        sqlParams2+=" and orders.createBy= '"+userId+"' "
+    }
     if(select!=""&&select!=undefined){
-        sqlParams2+=" and goods like '%"+select+"%' "
+        sqlParams2+=" and ( goods like '%"+select+"%' or remark like '%"+select+"%')"
     }
     if(eDate!=""&&eDate!=undefined){
         sqlParams2+=" and endDate <'"+eDate+" 23:59:59' "
@@ -225,10 +233,10 @@ exports.userGetTransactionRecord=function (req,res) {
     if(req.query.roomId!=""&&req.query.roomId!=undefined){
         sqlParams2+=" and room like '%"+req.query.roomId+"%' "
     }
-    let sqlParams=[userId, userId,offset,limit];
+    let sqlParams=[offset,limit];
     var sql ='select count(*) as total ' +
-    ' from orders,user where user.id=orders.createBy and orders.createBy=?     '+sqlParams2+' ;select orders.id,orders.status,orders.remark,user.username,orders.room,orders.goods,orders.num,orders.price,orders.createAt,orders.endDate' +
-    ' from orders,user where user.id=orders.createBy and orders.createBy=? '+sqlParams2+' ORDER BY createAt DESC limit ?,?'
+    ' from orders,user where user.id=orders.createBy    '+sqlParams2+' ;select orders.id,orders.status,orders.remark, orders.coin,user.username,orders.room,orders.goods,orders.num,orders.price,orders.createAt,orders.endDate' +
+    ' from orders,user where user.id=orders.createBy   '+sqlParams2+' ORDER BY createAt DESC limit ?,?'
     dbFunc.connectPool(sql, sqlParams, (err, rows) => {
 
         if (err) {
@@ -240,7 +248,7 @@ exports.userGetTransactionRecord=function (req,res) {
 };
 
 exports.userGetTransactionRecord_change=function (req,res) {
-    dbFunc.connectPool("update orders set status =?,remark=? where id=?",[req.query.status,req.query.remark,req.query.Id],(err,rows)=>{
+    dbFunc.connectPool("update orders set status =?,remark=?,room=? where id=?",[req.query.status,req.query.remark,req.query.room,req.query.Id],(err,rows)=>{
         if(err){
             res.json({msg:"err"});
             return;

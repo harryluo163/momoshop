@@ -14,11 +14,41 @@
     <link href="../plugins/jquery-confirm/jquery-confirm.min.css" rel="stylesheet"/>
     <link href="../plugins/select2/css/select2.min.css" rel="stylesheet"/>
     <link href="../plugins/datetimepicker/css/bootstrap-datetimepicker.min.css">
+    <link href="../plugins/datepicker/datepicker3.css" rel="stylesheet" type="text/css"/>
 
     <link href="../css/common.css" rel="stylesheet"/>
 </head>
 <body>
 <div id="main">
+    <div class="panel panel-default" style="margin: 0px 0px 0px 0px ">
+        <div class="panel-body">
+            <div class="row" style="margin-top: 10px;margin-left: 0px;margin-bottom: 14px">
+
+                <select name="" id="select" style="    height: 36px;
+                                  float: left;
+                                  margin-right: 10px;
+                                  border-radius: 4px;">
+                    <option value="">全部</option>
+                    <option value="单次">单次</option>
+                    <option value="包天">包天</option>
+                    <option value="包周">包周</option>
+                    <option value="包月">包月</option>
+                </select>
+                <input type="text" class="form-control" style="width: 120px;float: left;" placeholder="结束时间" id="eDate" name="eDate" value="" >
+                <input type="text" class="form-control" style="width: 120px;float: left;" placeholder="房间号 备注" id="roomid" value="" >
+
+
+
+            </div>
+            <div class="row">
+
+                <button type="button" class="col-sm-1 btn btn-danger btn-sm" style="margin-left: 15px;float:none;width: 58px;float: left;" onclick="_queryData();">查询
+                </button>
+            </div>
+
+
+        </div>
+    </div>
     <table id="table"></table>
 </div>
 <script src="../plugins/jquery.1.12.4.min.js"></script>
@@ -31,6 +61,7 @@
 <script src="../js/bootstrap-table-super-search.js"></script>
 <script src="../plugins/datetimepicker/js/bootstrap-datetimepicker.min.js"></script>
 <script src="../plugins/datetimepicker/js/bootstrap-datetimepicker.zh-CN.js"></script>
+<script src="../plugins/datepicker/bootstrap-datepicker.js"></script>
 
 <script src="../js/common.js"></script>
 <script>
@@ -45,16 +76,19 @@
         });
         // bootstrap table初始化
         $table.bootstrapTable({
-            url: '/admin/get/transactionRecord',
+            url: '/user/get/transactionRecord',
             method:'get',
             height: getHeight(),
             striped: true,
-            search: true,
-            searchOnEnterKey: true,
-            showSuperInput:false,
+            queryParams : function(params) {
+                return {
+                    select : $("#select").val(),
+                    eDate : $("#eDate").val(),
+                    roomId:$("#roomid").val()
+                };
+            },
             showColumns: false,
             minimumCountColumns: 2,
-            showRefresh:true,
             clickToSelect: true,
             detailFormatter: 'detailFormatter',
             pagination: true,
@@ -62,21 +96,23 @@
             classes: 'table table-hover table-no-bordered',
             sidePagination: 'server',
             smartDisplay: true,
-            idField: 'id',
-            uniqueId:'id',
+
             escape: true,
             showToggle:true,
+            cardView:true,
             toolbar: '#toolbar',
             columns: [
-                {field: 'id', title:'ID'},
+                {field: 'id', title: 'ID', align: 'center'},
                 {field: 'username', title: '用户名', align: 'center'},
                 {field: 'room', title: '房间ID', align: 'center'},
                 {field: 'goods', title: '商品', align: 'center'},
                 {field: 'num', title: '数量', align: 'center'},
                 {field: 'price', title: '消耗积分', align: 'center'},
+                {field: 'coin', title: '剩余积分', align: 'center'},
                 {field: 'createAt', title: '购买时间', align: 'center',formatter: 'dateFormatter'},
                 {field: 'endDate', title: '结束时间', align: 'center',formatter: 'dateFormatter'},
-                {field: 'status', title: '状态', align: 'center'},
+                {field: 'status', title: '状态', align: 'center',formatter: 'dateFormatter2'},
+                {field: 'remark', title: '备注', align: 'center',formatter: 'dateFornullr'},
                 {field: 'action', title: '操作', align: 'center', formatter: 'actionFormatter', events: 'actionEvents', clickToSelect: false}
             ],
         }).on('all.bs.table', function (e, name, args) {
@@ -84,10 +120,32 @@
             $('[data-toggle="popover"]').popover();
         });
     });
+    function _queryData(){
+        $table.bootstrapTable('refresh');
+    }
+    function ntActionFormatter(value, row, index) {
+        return   '<a class="edit ml10" href="javascript:void(0)" data-toggle="tooltip" title="修改"><i class="glyphicon glyphicon-edit"></i></a>　';
 
+
+    }
+    function dateFornullr(value, row, index) {
+        if(value=="null"){
+            value=''
+        }
+        return value
+    }
+    function dateFormatter2(value, row, index) {
+        if(value==0){
+            value='正常'
+        }else{
+            value='暂停'
+        }
+        return value
+    }
     function actionFormatter(value, row, index) {
         return [
-            '<a class="remove ml10" href="javascript:void(0)" data-toggle="tooltip" title="取消订单"><i class="glyphicon glyphicon-remove">取消订单</i></a>'
+            '<a class="edit ml10" href="javascript:void(0)" data-toggle="tooltip" title="修改"><i class="glyphicon glyphicon-edit"></i>编辑</a>',
+        '<a class="remove ml10" href="javascript:void(0)" data-toggle="tooltip" title="取消订单"><i class="glyphicon glyphicon-remove">取消订单</i></a>'
         ].join('');
     }
 
@@ -102,6 +160,68 @@
         return formatDate(new Date(value),"yyyy-MM-dd hh:mm:ss");
     }
     window.actionEvents = {
+        'click .edit': function (e, value, row, index) {
+            var status=row.status==0?"正常":"暂停";
+            var ck1,ck2=""
+            if(row.status==0){
+                ck1="checked"
+                ck2=""
+            }else{
+                ck1=""
+                ck2="checked"
+            }
+            $.confirm({
+                title: '修改订单',
+                content: '    <div class="form-group">\n' +
+                    '        <label>房间号：</label>\n' +
+                    '        <input type="text" value="' + row.room + '" placeholder="' + row.room + '" class="groom form-control">\n' +
+                    '    </div>'+
+                    '    <div class="form-group">\n' +
+                    '        <label>房间状态：</label>\n' +
+                    '  <label class="radio-inline">\n' +
+                    '        <input type="radio" name="status'+row.Id+'" id="" value="0" '+ck1+'>正常' +
+                    '    </label>\n' +
+                    '    <label class="radio-inline">\n' +
+                    '        <input type="radio" name="status'+row.Id+'" id=""  value="1" '+ck2+'> 暂停' +
+                    '    </label>' +
+                    '    </div>'+
+                    '    <div class="form-group">\n' +
+                    '        <label>备注：</label>\n' +
+                    '        <input type="text" value="' + row.remark + '"  placeholder="' + row.remark + '" class="gremark form-control">\n' +
+                    '    </div>',
+                buttons: {
+                    confirm: {
+                        text: '修改',
+                        action: function () {
+
+                            let groom = this.$content.find('.groom').val();
+                            let status = this.$content.find('input[name="status'+row.Id+'"]:checked').val();
+                            let remark = this.$content.find('.gremark').val();
+
+                            $.ajax({
+                                url: '/user/get/transactionRecord_change',
+                                type: 'get',
+                                data: {Id: row.id, room: groom,status: status,remark: remark},
+                                success: function (json) {
+                                    $.alert({
+                                        content: '修改成功！',
+                                        title: false,
+                                        closeIcon: false
+                                    });
+                                    $table.bootstrapTable('refresh');
+                                },
+                                error: function (error) {
+                                    console.log(error);
+                                }
+                            });
+                        }
+                    },
+                    cancel: {
+                        text: '取消'
+                    }
+                }
+            });
+        },
         'click .remove': function (e, value, row, index) {
             $.ajax({
                 url: '/admin/cancel/order',

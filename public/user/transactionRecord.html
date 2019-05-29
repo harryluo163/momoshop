@@ -32,7 +32,7 @@
                                       <option value="包月">包月</option>
                                   </select>
                                     <input type="text" class="form-control" style="width: 120px;float: left;" placeholder="结束时间" id="eDate" name="eDate" value="" >
-                                    <input type="text" class="form-control" style="width: 120px;float: left;" placeholder="房间号" id="roomid" value="" >
+                                    <input type="text" class="form-control" style="width: 120px;float: left;" placeholder="房间号 备注" id="roomid" value="" >
                                 
                                 
 
@@ -46,7 +46,7 @@
 
                 </div>
             </div>
-    <table id="table" style="min-width: 1000px"></table>
+    <table id="table" ></table>
 </div>
 <script src="../plugins/jquery.1.12.4.min.js"></script>
 <script src="../plugins/bootstrap-3.3.0/js/bootstrap.min.js"></script>
@@ -61,32 +61,7 @@
 
 <script src="../js/common.js"></script>
 <script>
-     function huadong() {
 
-var startX, startY, endX, endY;
-document.getElementById("wrapper").addEventListener("touchstart",
-touchStart, false);
-document.getElementById("wrapper").addEventListener("touchmove", touchMove,
-false);
-document.getElementById("wrapper").addEventListener("touchend", touchEnd,
-false);
-function touchStart(event) {
-var touch = event.touches[0];
-startY = touch.pageY;
-startX = touch.pageX;
-}
-function touchMove(event) {
-var touch = event.touches[0];
-endX = touch.pageX;
-}
-function touchEnd(event) {
-if ((startX - endX) > 100) {
-parent.$("#oiframes").attr('src', 'hzlb.html');//页面跳转
-} else if ((endX - startX) > 100) {
-parent.$("#oiframes").attr('src', 'hlxq.html');//页面跳转
-}
-}
-}
 
     var $table = $('#table');
     var datatable;
@@ -110,7 +85,7 @@ parent.$("#oiframes").attr('src', 'hlxq.html');//页面跳转
                 eDate : $("#eDate").val(),
                 roomId:$("#roomid").val()
             };
-        },
+             },
             showColumns: false,
             minimumCountColumns: 2,
             clickToSelect: true,
@@ -129,40 +104,16 @@ parent.$("#oiframes").attr('src', 'hlxq.html');//页面跳转
                
                  {field: 'id', title: 'ID', align: 'center'},
                 {field: 'username', title: '用户名', align: 'center'},
-       
-                {field: 'operation1', title: '房间ID', 
-                formatter : function(cell, row, index) {
-			
-					return '<input id="room'+row.id+'" value="'+row.room+'" />';
-				},},
+                {field: 'room', title: '房间ID', align: 'center'},
                 {field: 'goods', title: '商品', align: 'center'},
                 {field: 'num', title: '数量', align: 'center'},
                 {field: 'price', title: '消耗积分', align: 'center'},
+                {field: 'coin', title: '剩余积分', align: 'center'},
                 {field: 'createAt', title: '购买时间', align: 'center',formatter: 'dateFormatter'},
                 {field: 'endDate', title: '结束时间', align: 'center',formatter: 'dateFormatter'},
                 {field: 'status', title: '状态', align: 'center',formatter: 'dateFormatter2'},
-                {field: 'operation2', title: '备注', 
-                formatter : function(cell, row, index) {
-			
-					return '<textarea rows="3" id="textarea'+row.id+'" cols="20" >'+row.remark+'</textarea>';
-				},},
-                 {
-                field: 'operation',
-                title: '操作',
-                width:200,
-            	formatter : function(cell, row, index) {
-                    btnEdit = '';					
-                    if(row.status==1){
-                        btnEdit = '<a style="width:100px" class=" btn-warning btn-sm"  onclick="change(0,'+row.id+')"  >恢复</a>';					
-                    }else{
-                        btnEdit = '<a style="width:100px" class=" btn-warning btn-sm"    onclick="change(1,'+row.id+')" >暂停</a>';					
-					
-                    }
-                    btnEdit2 = '&nbsp<a style="width:100px" class=" btn-warning btn-sm"  onclick="changeId('+row.id+')"  >修改Id</a>';		
-						
-					return btnEdit+btnEdit2;
-				},
-            } ,
+                {field: 'remark', title: '备注', align: 'center',formatter: 'dateFornullr'},
+                {field: 'action', title: '操作', align: 'center', formatter: 'ntActionFormatter', events: 'nameActionEvent', clickToSelect: false},
 
             ],
         }).on('all.bs.table', function (e, name, args) {
@@ -183,6 +134,11 @@ parent.$("#oiframes").attr('src', 'hlxq.html');//页面跳转
     function _queryData(){
         datatable.bootstrapTable('refresh');
     }
+     function ntActionFormatter(value, row, index) {
+         return   '<a class="edit ml10" href="javascript:void(0)" data-toggle="tooltip" title="修改"><i class="glyphicon glyphicon-edit"></i></a>　';
+
+
+     }
     function detailFormatter(index, row) {
         var html = [];
         $.each(row, function (key, value) {
@@ -201,34 +157,76 @@ parent.$("#oiframes").attr('src', 'hlxq.html');//页面跳转
         }
         return value
     }
-    
+
+     window.nameActionEvent= {
+         'click .edit': function (e, value, row, index) {
+             var status=row.status==0?"正常":"暂停";
+             var ck1,ck2=""
+             if(row.status==0){
+                 ck1="checked"
+                 ck2=""
+             }else{
+                 ck1=""
+                 ck2="checked"
+             }
+             $.confirm({
+                 title: '修改订单',
+                 content: '    <div class="form-group">\n' +
+                     '        <label>房间号：</label>\n' +
+                     '        <input type="text" value="' + row.room + '" placeholder="' + row.room + '" class="groom form-control">\n' +
+                     '    </div>'+
+                     '    <div class="form-group">\n' +
+                     '        <label>房间状态：</label>\n' +
+                     '  <label class="radio-inline">\n' +
+                     '        <input type="radio" name="status'+row.Id+'" id="" value="0" '+ck1+'>正常' +
+                     '    </label>\n' +
+                     '    <label class="radio-inline">\n' +
+                     '        <input type="radio" name="status'+row.Id+'" id=""  value="1" '+ck2+'> 暂停' +
+                     '    </label>' +
+                     '    </div>'+
+                     '    <div class="form-group">\n' +
+                     '        <label>备注：</label>\n' +
+                     '        <input type="text" value="' + row.remark + '"  placeholder="' + row.remark + '" class="gremark form-control">\n' +
+                     '    </div>',
+                 buttons: {
+                     confirm: {
+                         text: '修改',
+                         action: function () {
+
+                             let groom = this.$content.find('.groom').val();
+                             let status = this.$content.find('input[name="status'+row.Id+'"]:checked').val();
+                             let remark = this.$content.find('.gremark').val();
+
+                             $.ajax({
+                                 url: '/user/get/transactionRecord_change',
+                                 type: 'get',
+                                 data: {Id: row.id, room: groom,status: status,remark: remark},
+                                 success: function (json) {
+                                     $.alert({
+                                         content: '修改成功！',
+                                         title: false,
+                                         closeIcon: false
+                                     });
+                                     datatable.bootstrapTable('refresh');
+                                 },
+                                 error: function (error) {
+                                     console.log(error);
+                                 }
+                             });
+                         }
+                     },
+                     cancel: {
+                         text: '取消'
+                     }
+                 }
+             });
+         }
+     }
     function dateFornullr(value, row, index) {
         if(value=="null"){
             value=''
         }
         return value
-    }
-    function change(status,Id){
-        
-        $.ajax({
-        url: '/user/get/transactionRecord_change',
-        type: 'get',
-        data: {
-            status:status,
-            remark:$("#textarea"+Id).val(),
-            Id:Id
-        },
-        success: function(json){
-                if(json.msg=="ok"){
-                    datatable.bootstrapTable('refresh');
-                }
-        },
-        error: function(error){
-            console.log(error);
-            localStorage.clear();
-            location.href='/login';
-        }
-    });
     }
 
 
