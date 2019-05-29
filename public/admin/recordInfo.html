@@ -1,0 +1,113 @@
+<!DOCTYPE HTML>
+<html lang="zh-cn">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title></title>
+
+	<link href="../plugins/bootstrap-3.3.0/css/bootstrap.min.css" rel="stylesheet"/>
+	<link href="../plugins/material-design-iconic-font-2.2.0/css/material-design-iconic-font.min.css" rel="stylesheet"/>
+	<link href="../plugins/bootstrap-table-1.11.0/bootstrap-table.min.css" rel="stylesheet"/>
+	<link href="../plugins/waves-0.7.5/waves.min.css" rel="stylesheet"/>
+	<link href="../plugins/jquery-confirm/jquery-confirm.min.css" rel="stylesheet"/>
+	<link href="../plugins/select2/css/select2.min.css" rel="stylesheet"/>
+
+	<link href="../css/common.css" rel="stylesheet"/>
+</head>
+<body>
+<div id="main">
+	<h4 id="usage">帐号使用情况: --/-- </h4>
+	<table id="table"></table>
+</div>
+<script src="../plugins/jquery.1.12.4.min.js"></script>
+<script src="../plugins/bootstrap-3.3.0/js/bootstrap.min.js"></script>
+<script src="../plugins/bootstrap-table-1.11.0/bootstrap-table.min.js"></script>
+<script src="../plugins/bootstrap-table-1.11.0/locale/bootstrap-table-zh-CN.min.js"></script>
+<script src="../plugins/waves-0.7.5/waves.min.js"></script>
+<script src="../plugins/jquery-confirm/jquery-confirm.min.js"></script>
+<script src="../plugins/select2/js/select2.min.js"></script>
+<script src="../js/bootstrap-table-super-search.js"></script>
+<script src="../js/common.js"></script>
+<script>
+let $table = $('#table');
+$(function() {
+    let oInit = new Object();
+
+    $table.bootstrapTable({
+        url: '/server/status',
+        method:'get',
+        height: getHeight(),
+        detailView: true,
+        striped: true,
+        search: false,
+        searchOnEnterKey: false,
+        superSearch:false,
+        superSearchAlign:'right',
+        showColumns: false,
+        minimumCountColumns: 2,
+        clickToSelect: true,
+        detailFormatter: 'detailFormatter',
+        pagination: true,
+        paginationLoop: false,
+        classes: 'table table-hover table-no-bordered',
+        sidePagination: 'server',
+        smartDisplay: true,
+        idField: 'addr',
+        uniqueId:'addr',
+        escape: true,
+        showRefresh:true,
+        showToggle:true,
+        toolbar: '#toolbar',
+        columns:[
+            {field: 'addr', title: '服务器', align: 'center'},
+            {field: 'total', title: '所有数量', align: 'center'},
+            {field: 'left', title: '剩余数量', align: 'center'},
+            {field: 'status', title: '状态', align: 'center'},
+        ],
+//注册加载子表的事件。注意下这里的三个参数！
+        onExpandRow: function (index, row, $detail) {
+            oInit.InitSubTable(index, row, $detail);
+        }
+    });
+
+    oInit.InitSubTable = function(index, row, $detail) {
+        let salesNo = row.addr;
+        let cur_table = $detail.html('<table></table>').find('table');
+        $(cur_table).bootstrapTable({
+            url:'/server/detail?addr='+salesNo,
+            pagination:false,
+            sidePagination: "server",
+            dataType:'json',
+            showFooter: false,
+            detailView:false,//父子表
+            columns: [ {
+                field: 'id',
+                title: '订单号',
+            }, {
+                field: 'room',
+                title: ' 房间号',
+            }, {
+                field: 'num',
+                title: '数量',
+            },],
+        });
+        return oInit;
+    };
+});
+
+
+$.ajax({
+    url: '/server/users/status',
+    type: 'GET',
+    success: function(json){
+        document.getElementById("usage").innerHTML="使用数量: " + json.used + "/" + json.total;
+    },
+    error: function(error){
+        console.log(error);
+    }
+});
+
+</script>
+</body>
+</html>

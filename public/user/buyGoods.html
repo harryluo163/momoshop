@@ -1,0 +1,304 @@
+<!DOCTYPE HTML>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title></title>
+
+    <link href="../plugins/bootstrap-3.3.0/css/bootstrap.min.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="../css/bootstrap-select.css">
+    <link href="../plugins/material-design-iconic-font-2.2.0/css/material-design-iconic-font.min.css" rel="stylesheet"/>
+    <link href="../plugins/waves-0.7.5/waves.min.css" rel="stylesheet"/>
+    <link href="../plugins/jquery-confirm/jquery-confirm.min.css" rel="stylesheet"/>
+    <link href="../css/common.css" rel="stylesheet"/>
+    <link href="../plugins/bootstrap-input-spinner/bootstrap-input-spinner.css">
+</head>
+<style>
+    .zm-pay{
+        float: left;
+        color: #fff;
+        background-color: #5cb85c;
+        border-color: #4cae4c;
+        min-width: 100px;
+        min-height: 34px;
+    }
+    .zm-pay:hover{
+        color: #fff;
+        background-color: #449d44;
+        border-color: #398439;
+        cursor: pointer;
+    }
+    .mtb{
+        margin-top: 5px;
+    }
+    .mroom{
+        margin-top: 4px;
+        max-width: 300px;
+        margin-left: 21px;
+    }
+    .panel-body{
+        padding: 9px;
+    }
+    .content_tab{
+        height: 38px;
+    }
+
+    .content_tab>ul>li>a{
+        height: 38px;
+    }
+    #main {
+        padding: 2px 10px;
+}
+</style>
+<body>
+<div id="main">
+    <div class="panel panel-default" style="    margin-bottom: 10px;">
+        <div class="panel-heading">选择您需要的商品，然后购买</div>
+        <div class="input-group mroom">
+            <span class="input-group-addon" >请输入要充值的房间ID：</span>
+            <input type="text" class="form-control" id="room-id">
+        </div>
+        <div class="panel-body" id="buygg" style="    padding: 4px;">
+        </div>
+    </div>
+    <div class="row" style="margin-left: 10px">
+        <div class="col-xs-12">当前积分：<label id="current-coin"></label></div>
+    </div>
+    <div class="row" style="margin-left: 10px">
+        <div class="col-xs-12 col-sm-6 mtb">
+            <span >选择商品数量:</span>
+            <!--<select class="selectpicker" data-live-search="true" id="goodsNum" style="min-width: 200px;max-width: 300px">-->
+                <!--<option value="1" selected="true">1</option>-->
+                <!--<option value="2" >2</option>-->
+                <!--<option value="3">3</option>-->
+                <!--<option value="4">4</option>-->
+                <!--<option value="5">5</option>-->
+                <!--<option value="6">6</option>-->
+                <!--<option value="7">7</option>-->
+                <!--<option value="8">8</option>-->
+                <!--<option value="9">9</option>-->
+                <!--<option value="10">10</option>-->
+            <!--</select>-->
+            <div class="form-group form-group-options" style="min-width: 200px;max-width: 300px;margin-bottom: 0px">
+                <div id="1" class="input-group input-group-option quantity-wrapper">
+                                <span class="input-group-addon input-group-addon-remove quantity-remove btn">
+                                    <span class="glyphicon glyphicon-minus"></span>
+                                </span>
+                    <input id="goodsNum" type="text" name="option[]" class="form-control quantity-count"
+                           placeholder="购买数量">
+                    <span class="input-group-addon input-group-addon-remove quantity-add btn">
+                                    <span class="glyphicon glyphicon-plus"></span>
+                                </span>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-6 mtb">
+            <div class="input-group">
+                <span class="input-group-addon">消耗积分:</span>
+                <input id="payValue" type="text" class="form-control" readonly style="max-width: 60px">
+                <span class="input-group-addon zm-pay">确认购买</span>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../plugins/jquery.1.12.4.min.js"></script>
+<script src="../plugins/bootstrap-3.3.0/js/bootstrap.min.js"></script>
+<script src="../plugins/waves-0.7.5/waves.min.js"></script>
+<script src="../plugins/jquery-confirm/jquery-confirm.min.js"></script>
+<script  src="../js/bootstrap-select.js"></script>
+<script src="../plugins/bootstrap-input-spinner/bootstrap-input-spinner.js"></script>
+<script  src="../js/randomWord.js"></script>
+
+<script>
+    function huadong() {
+
+        var startX, startY, endX, endY;
+        document.getElementById("wrapper").addEventListener("touchstart",
+        touchStart, false);
+        document.getElementById("wrapper").addEventListener("touchmove", touchMove,
+        false);
+        document.getElementById("wrapper").addEventListener("touchend", touchEnd,
+        false);
+        function touchStart(event) {
+        var touch = event.touches[0];
+        startY = touch.pageY;
+        startX = touch.pageX;
+        }
+        function touchMove(event) {
+        var touch = event.touches[0];
+        endX = touch.pageX;
+        }
+        function touchEnd(event) {
+        if ((startX - endX) > 100) {
+        parent.$("#oiframes").attr('src', 'hzlb.html');//页面跳转
+        } else if ((endX - startX) > 100) {
+        parent.$("#oiframes").attr('src', 'hlxq.html');//页面跳转
+        }
+        }
+        }
+
+    var goods_num=1,goods_single_price=undefined,allGoods,gvId;
+    $(document).ready(function() {
+        $("#current-coin").text(localStorage.getItem("coin"));
+        $.ajax({
+            url: '/user/all/goods',
+            type: 'GET',
+            success: function (data) {
+                allGoods=data;
+                data.forEach(function (goods) {
+                    $('#buygg').append('<div class="col-xs-12 col-sm-6 col-md-4 mtb">\n' +
+                        '                <div class="input-group">\n' +
+                        '                    <span class="input-group-addon">\n' +
+                        '                        <input type="radio" name="abc" onclick="radioClick(this)">\n' +
+                        '                    </span>\n' +
+                        '                    <input type="text" class="form-control" readonly value=\"' + goods.goodsName + ' ' + goods.goodsType + ' ' + goods.goodsValue +' '+"积分"+ '\">\n' +
+                        '                </div>\n' +
+                        '            </div>');
+                })
+            },
+            error: function (error) {
+                $('#buygg').append('<p><h4>产品为空......</h4></p>');
+            }
+        });
+        if (/Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent)) {
+            $('.selectpicker').selectpicker('mobile');
+        }
+        $('#goodsNum').change(function () {
+            let tmpVal=$(this).val();
+            if(isNaN(tmpVal)){
+                $(this).val($(this).data("oldVal"));
+                $.alert({
+                    content:'请输入数字！',
+                    title:false,
+                    cancelButton:false,
+                    closeIcon:false
+                });
+                return;
+            }
+            goods_num=$(this).val();
+            $(this).data("oldVal",goods_num);
+            if(!goods_single_price){
+                $.alert({
+                    content:'请选择需要的产品！',
+                    title:false,
+                    cancelButton:false,
+                    closeIcon:false
+                });
+            }else {
+
+                $('#payValue').val(goods_single_price*goods_num);
+            }
+        });
+        $('.zm-pay').click(function () {
+            if(!goods_single_price){
+                $.alert({
+                    content:'请选择需要的产品！',
+                    title:false,
+                    closeIcon:false
+                });
+            }else{
+                let roomId=$("#room-id").val();
+                if(roomId==""||roomId==undefined){
+                    $.alert({
+                        content:'请输入要充值的房间ID！',
+                        title:false,
+                        closeIcon:false
+                    });
+                    return ;
+                }
+                if(isNaN(roomId)){
+                    $.alert({
+                        content:'输入要充值的房间ID有错误，请重新输入！',
+                        title:false,
+                        closeIcon:false
+                    });
+                    return ;
+                }
+
+                if (goods_num < 1) {
+                    $.alert({
+                        content:'请输入购买数量',
+                        title:false,
+                        cancelButton:false,
+                        closeIcon:false
+                    });
+                    return;
+                }
+                let coin=parseInt(localStorage.getItem("coin"));
+                if(goods_single_price*goods_num>coin){
+                    $.alert({
+                        content:'积分不够，请充值！',
+                        title:false,
+                        closeIcon:false
+                    });
+                    return ;
+                }
+
+                // let title = '房间号' + roomId +' 需要' + goods_single_price*goods_num + '积分';
+                // $.confirm({
+                //     title: false,
+                //     content: title,
+                //     confirm: function(){
+                //         $.alert('Confirmed!');
+                //     },
+                //     cancel: function(){
+                //         $.alert('Canceled!')
+                //     }
+                // });
+                $.ajax({
+                    url: '/user/buy/goods',
+                    type: 'POST',
+                    data: {
+                        id:RandomWord('1234567890').random(8),
+                        roomId:roomId,
+                        userId: localStorage.getItem('id'),
+                        num:goods_num,
+                        gvId:gvId
+                    },
+                    success: function (data) {
+                        if(data.error){
+                            $.alert({
+                                content:'购买错误',
+                                title:false,
+                                closeIcon:false
+                            });
+                        }else{
+                            localStorage.setItem("coin",coin-goods_single_price*goods_num);
+                            $("#current-coin").text(localStorage.getItem("coin"));
+                            $("#room-id").val('');
+                            $("#goodsNum").val('');
+                            $.alert({
+                                content:'成功购买！',
+                                title:false,
+                                closeIcon:false
+                            });
+                        }
+                    },
+                    error: function (error) {
+                        $.alert({
+                            content:error,
+                            title:false,
+                            closeIcon:false
+                        });
+                    }
+                });
+            }
+        });
+    });
+    function radioClick(e) {
+        let goods=$(e).parent().parent().children('.form-control').val();
+        var items=goods.split(" ");
+        let name=items[0],type=items[1];
+        goods_single_price=parseInt(items[items.length-2]);
+        $('#payValue').val(goods_single_price*goods_num);
+        allGoods.forEach(function (data) {
+            if(data.goodsName==name&&data.goodsType==type){
+                gvId=data.id;
+                return;
+            }
+        });
+    }
+</script>
+</body>
+</html>

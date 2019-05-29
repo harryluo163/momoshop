@@ -1,0 +1,164 @@
+<!DOCTYPE HTML>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>陌陌下单系统</title>
+
+    <link href="plugins/fullPage/jquery.fullPage.css" rel="stylesheet"/>
+    <link href="plugins/bootstrap-3.3.0/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="plugins/material-design-iconic-font-2.2.0/css/material-design-iconic-font.min.css" rel="stylesheet"/>
+    <link href="plugins/waves-0.7.5/waves.min.css" rel="stylesheet"/>
+    <link href="plugins/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.min.css" rel="stylesheet"/>
+    <link href="css/admin.css" rel="stylesheet"/>
+    <style>
+        /** skins **/
+        body #header {background: #29A176;}
+        body .content_tab{background: #29A176;}
+        body .s-profile>a{background: url(images/mainbg.png) left top no-repeat;}
+    </style>
+</head>
+<body>
+<header id="header">
+    <ul id="menu">
+        <li id="guide" class="line-trigger">
+            <div class="line-wrap">
+                <div class="line top"></div>
+                <div class="line center"></div>
+                <div class="line bottom"></div>
+            </div>
+        </li>
+        <li id="logo">
+            <span id="system_title">陌陌下单系统</span>
+        </li>
+        <li class="pull-right">
+        </li>
+    </ul>
+</header>
+<section id="main">
+    <!-- 左侧导航区 -->
+    <aside id="sidebar">
+        <!-- 个人资料区 -->
+        <div class="s-profile">
+            <a class="waves-effect waves-light" href="javascript:;">
+                <div class="sp-pic">
+                    <img src="images/avatar.jpg"/>
+                </div>
+                <div class="sp-info">
+                    您好！
+                    <i class="zmdi zmdi-caret-down"></i>
+                </div>
+            </a>
+            <ul class="main-menu">
+                <li>
+                    <a class="waves-effect" href="javascript:;" onclick="exit()"><i class="zmdi zmdi-run"></i> 退出登录</a>
+                </li>
+            </ul>
+        </div>
+        <!-- /个人资料区 -->
+        <!-- 菜单区 -->
+        <ul class="main-menu">
+            <li >
+                <a class="waves-effect " href="javascript:Tab.addTab('首页', 'home');"><i class="zmdi zmdi-home"></i> 首页</a>
+            </li>
+            <li class="system_menus system_1">
+                <a class="waves-effect" href="javascript:Tab.addTab('用户管理', 'admin/manageUser.html');"><i class="zmdi zmdi-accounts"></i> 用户管理</a>
+            </li>
+            <li class="system_menus system_1 system_2">
+                <a class="waves-effect"  href="javascript:Tab.addTab('购买产品', '/user/buyGoods.html');"><i class="zmdi zmdi-calendar-note"></i> 购买产品</a>
+            </li>
+            <li class="system_menus system_1">
+                <a class="waves-effect" href="javascript:Tab.addTab('商品管理', '/admin/manageGoods.html');"><i class="zmdi zmdi-shopping-cart-add"></i> 商品管理</a>
+            </li>
+            <li class="system_menus system_1">
+                <a class="waves-effect" href="javascript:Tab.addTab('积分充值', '/admin/boundsCharge.html');"><i class="zmdi zmdi-card"></i> 积分充值</a>
+            </li>
+            <li class="system_menus system_1">
+                <a class="waves-effect" href="javascript:Tab.addTab('交易记录', '/admin/transactionRecord.html');"><i class="zmdi zmdi-calendar-note"></i> 交易记录</a>
+            </li>
+            <li class="system_menus system_1">
+                <a class="waves-effect" href="javascript:Tab.addTab('统计信息', '/admin/recordInfo.html');"><i class="zmdi zmdi-calendar-note"></i> 统计信息</a>
+            </li>
+
+            <li class="system_menus system_2">
+                <a class="waves-effect"  href="javascript:Tab.addTab('交易记录', '/user/transactionRecord.html');"><i class="zmdi zmdi-calendar-note"></i> 交易记录</a>
+            </li>
+            <li>
+                <div class="upms-version">
+                </div>
+            </li>
+        </ul>
+        <!-- /菜单区 -->
+    </aside>
+    <!-- /右侧导航区 -->
+    <section id="content">
+        <div class="content_tab">
+            <div class="tab_left">
+                <a class="waves-effect waves-light" href="javascript:;"><i class="zmdi zmdi-chevron-left"></i></a>
+            </div>
+            <div class="tab_right">
+                <a class="waves-effect waves-light" href="javascript:;"><i class="zmdi zmdi-chevron-right"></i></a>
+            </div>
+            <ul id="tabs" class="tabs">
+                <li id="tab_home" data-index="home" data-closeable="false" class="cur">
+                    <a class="waves-effect waves-light">首页</a>
+                </li>
+            </ul>
+        </div>
+        <div class="content_main">
+            <div id="iframe_home" class="iframe cur">
+                <p><h4 style="margin: 0 auto;width: 200px">陌陌人气在线购买</h4></p>
+                <p><h4>产品分类：</h4></p>
+                <p>陌陌50人气单次、包天、包周、包月</p>
+                <p>陌陌100人气单次、包天、包周、包月</p>
+                <p>陌陌200人气单次、包天、包周、包月</p>
+                <p>陌陌300人气单次、包天、包周、包月</p>
+                <p>陌陌400人气单次、包天、包周、包月</p>
+                <p>陌陌500人气单次、包天、包周、包月</p>
+                <p>陌陌600人气单次、包天、包周、包月</p>
+                <p>陌陌700人气单次、包天、包周、包月</p>
+                <p>陌陌800人气单次、包天、包周、包月</p>
+                <p>陌陌900人气单次、包天、包周、包月</p>
+                <p>陌陌1000人气单次、包天、包周、包月</p>
+
+                <p>陌陌派对50人气单次、包天、包周、包月</p>
+                <p>陌陌派对100人气单次、包天、包周、包月</p>
+                <p>陌陌派对200人气单次、包天、包周、包月</p>
+                <p>陌陌派对300人气单次、包天、包周、包月</p>
+                <p>陌陌派对400人气单次、包天、包周、包月</p>
+                <p>陌陌派对500人气单次、包天、包周、包月</p>
+                <p>陌陌派对600人气单次、包天、包周、包月</p>
+                <p>陌陌派对700人气单次、包天、包周、包月</p>
+                <p>陌陌派对800人气单次、包天、包周、包月</p>
+                <p>陌陌派对900人气单次、包天、包周、包月</p>
+                <p>陌陌派对1000人气单次、包天、包周、包月</p>
+
+                <p>陌陌派对1000人气单次、包天、包周、包月</p>
+                <p>陌陌派对1000人气单次、包天、包周、包月</p>
+                <p>陌陌派对1000人气单次、包天、包周、包月</p>
+                <p>陌陌派对1000人气单次、包天、包周、包月</p>
+                <p>关注1000人气单次</p>
+                <p>点赞1000人气单次</p>
+                <p>视频播放量1000人气单次</p>
+                <p><h4>客户购买说明：</h4></p>
+                <p>客户选择类型、数量，然后点击购买，客户就会扣除相应的积分</p>
+            </div>
+        </div>
+    </section>
+</section>
+<footer id="footer"></footer>
+
+<script src="plugins/jquery.1.12.4.min.js"></script>
+<script src="plugins/bootstrap-3.3.0/js/bootstrap.min.js"></script>
+<script src="plugins/waves-0.7.5/waves.min.js"></script>
+<script src="plugins/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.concat.min.js"></script>
+<script src="plugins/BootstrapMenu.min.js"></script>
+<script src="plugins/device.min.js"></script>
+<script src="plugins/fullPage/jquery.fullPage.min.js"></script>
+<script src="plugins/fullPage/jquery.jdirk.min.js"></script>
+<script src="plugins/jquery.cookie.js"></script>
+
+<script src="js/admin.js"></script>
+</body>
+</html>

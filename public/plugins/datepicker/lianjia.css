@@ -1,0 +1,19 @@
+.main-header,.sidebar-mini.sidebar-collapse .main-header .navbar ,  .sidebar-mini.sidebar-collapse .main-header .logo, .pull-right, .pull-right ,strong {
+    display: none;
+}
+.content-wrapper,.skin-red-light .main-sidebar{
+    background-color: rgba(45,34,46,1);
+}
+.sidebar-mini.sidebar-collapse .main-sidebar {
+    width: 51px!important;
+}
+.skin-red-light .sidebar a {
+    color: #ffffff;
+}
+
+.sidebar-mini.sidebar-collapse .main-footer {
+    background: rgba(45,34,46,1);
+    border: 1px solid rgba(45,34,46,1);
+    color:rgba(45,34,46,1);
+}
+

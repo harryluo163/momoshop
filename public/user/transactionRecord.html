@@ -1,0 +1,261 @@
+<!DOCTYPE HTML>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title></title>
+
+    <link href="../plugins/bootstrap-3.3.0/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="../plugins/material-design-iconic-font-2.2.0/css/material-design-iconic-font.min.css" rel="stylesheet"/>
+    <link href="../plugins/bootstrap-table-1.11.0/bootstrap-table.min.css" rel="stylesheet"/>
+    <link href="../plugins/waves-0.7.5/waves.min.css" rel="stylesheet"/>
+    <link href="../plugins/jquery-confirm/jquery-confirm.min.css" rel="stylesheet"/>
+    <link href="../plugins/datepicker/datepicker3.css" rel="stylesheet" type="text/css"/>
+
+    <link href="../css/common.css" rel="stylesheet"/>
+</head>
+<body>
+<div id="main" style="    padding:0px 10px;">
+        <div class="panel panel-default" style="margin: 0px 0px 0px 0px ">
+                <div class="panel-body">                        
+                            <div class="row" style="margin-top: 10px;margin-left: 0px;margin-bottom: 14px">
+                                
+                                  <select name="" id="select" style="    height: 36px;
+                                  float: left;
+                                  margin-right: 10px;
+                                  border-radius: 4px;">
+                                      <option value="">全部</option>
+                                      <option value="单次">单次</option>
+                                      <option value="包天">包天</option>
+                                      <option value="包周">包周</option>
+                                      <option value="包月">包月</option>
+                                  </select>
+                                    <input type="text" class="form-control" style="width: 120px;float: left;" placeholder="结束时间" id="eDate" name="eDate" value="" >
+                                    <input type="text" class="form-control" style="width: 120px;float: left;" placeholder="房间号" id="roomid" value="" >
+                                
+                                
+
+                            </div>
+                                    <div class="row">   
+                                           
+                                    <button type="button" class="col-sm-1 btn btn-danger btn-sm" style="margin-left: 15px;float:none;width: 58px;float: left;" onclick="_queryData();">查询
+                                        </button>
+                                    </div>
+
+
+                </div>
+            </div>
+    <table id="table" style="min-width: 1000px"></table>
+</div>
+<script src="../plugins/jquery.1.12.4.min.js"></script>
+<script src="../plugins/bootstrap-3.3.0/js/bootstrap.min.js"></script>
+<script src="../plugins/bootstrap-table-1.11.0/bootstrap-table.min.js"></script>
+<script src="../plugins/bootstrap-table-1.11.0/locale/bootstrap-table-zh-CN.min.js"></script>
+<script src="../plugins/waves-0.7.5/waves.min.js"></script>
+<script src="../plugins/jquery-confirm/jquery-confirm.min.js"></script>
+
+<script src="../js/bootstrap-table-super-search.js"></script>
+<script src="../plugins/datepicker/bootstrap-datepicker.js"></script>
+
+
+<script src="../js/common.js"></script>
+<script>
+     function huadong() {
+
+var startX, startY, endX, endY;
+document.getElementById("wrapper").addEventListener("touchstart",
+touchStart, false);
+document.getElementById("wrapper").addEventListener("touchmove", touchMove,
+false);
+document.getElementById("wrapper").addEventListener("touchend", touchEnd,
+false);
+function touchStart(event) {
+var touch = event.touches[0];
+startY = touch.pageY;
+startX = touch.pageX;
+}
+function touchMove(event) {
+var touch = event.touches[0];
+endX = touch.pageX;
+}
+function touchEnd(event) {
+if ((startX - endX) > 100) {
+parent.$("#oiframes").attr('src', 'hzlb.html');//页面跳转
+} else if ((endX - startX) > 100) {
+parent.$("#oiframes").attr('src', 'hlxq.html');//页面跳转
+}
+}
+}
+
+    var $table = $('#table');
+    var datatable;
+    $(function() {
+        $(document).on('focus', 'input[type="text"]', function() {
+            $(this).parent().find('label').addClass('active');
+        }).on('blur', 'input[type="text"]', function() {
+            if ($(this).val() == '') {
+                $(this).parent().find('label').removeClass('active');
+            }
+        });
+        // bootstrap table初始化
+        datatable= $table.bootstrapTable({
+            url: '/user/get/transactionRecord?id='+localStorage.getItem('id'),
+            method:'get',
+            height: getHeight(),
+            striped: true,
+            queryParams : function(params) {
+             return {
+                select : $("#select").val(),
+                eDate : $("#eDate").val(),
+                roomId:$("#roomid").val()
+            };
+        },
+            showColumns: false,
+            minimumCountColumns: 2,
+            clickToSelect: true,
+            detailFormatter: 'detailFormatter',
+            pagination: true,
+            paginationLoop: false,
+            classes: 'table table-hover table-no-bordered',
+            sidePagination: 'server',
+            smartDisplay: true,
+    
+            escape: true,
+            showToggle:true,
+            cardView:true,
+            toolbar: '#toolbar',
+            columns: [
+               
+                 {field: 'id', title: 'ID', align: 'center'},
+                {field: 'username', title: '用户名', align: 'center'},
+       
+                {field: 'operation1', title: '房间ID', 
+                formatter : function(cell, row, index) {
+			
+					return '<input id="room'+row.id+'" value="'+row.room+'" />';
+				},},
+                {field: 'goods', title: '商品', align: 'center'},
+                {field: 'num', title: '数量', align: 'center'},
+                {field: 'price', title: '消耗积分', align: 'center'},
+                {field: 'createAt', title: '购买时间', align: 'center',formatter: 'dateFormatter'},
+                {field: 'endDate', title: '结束时间', align: 'center',formatter: 'dateFormatter'},
+                {field: 'status', title: '状态', align: 'center',formatter: 'dateFormatter2'},
+                {field: 'operation2', title: '备注', 
+                formatter : function(cell, row, index) {
+			
+					return '<textarea rows="3" id="textarea'+row.id+'" cols="20" >'+row.remark+'</textarea>';
+				},},
+                 {
+                field: 'operation',
+                title: '操作',
+                width:200,
+            	formatter : function(cell, row, index) {
+                    btnEdit = '';					
+                    if(row.status==1){
+                        btnEdit = '<a style="width:100px" class=" btn-warning btn-sm"  onclick="change(0,'+row.id+')"  >恢复</a>';					
+                    }else{
+                        btnEdit = '<a style="width:100px" class=" btn-warning btn-sm"    onclick="change(1,'+row.id+')" >暂停</a>';					
+					
+                    }
+                    btnEdit2 = '&nbsp<a style="width:100px" class=" btn-warning btn-sm"  onclick="changeId('+row.id+')"  >修改Id</a>';		
+						
+					return btnEdit+btnEdit2;
+				},
+            } ,
+
+            ],
+        }).on('all.bs.table', function (e, name, args) {
+            $('[data-toggle="tooltip"]').tooltip();
+            $('[data-toggle="popover"]').popover();
+        });
+        $("#eDate").datepicker('remove');
+        $("#eDate").datepicker({
+            startView: 0,
+            maxViewMode: 1,
+            minViewMode: 0,
+            language: 'zh-cn',
+            format: 'yyyy-mm-dd',
+            autoclose: true
+        });
+
+    });
+    function _queryData(){
+        datatable.bootstrapTable('refresh');
+    }
+    function detailFormatter(index, row) {
+        var html = [];
+        $.each(row, function (key, value) {
+            html.push('<p><b>' + key + ':</b> ' + value + '</p>');
+        });
+        return html.join('');
+    }
+    function dateFormatter(value, row, index) {
+        return formatDate(new Date(value),"yyyy-MM-dd hh:mm:ss");
+    }
+    function dateFormatter2(value, row, index) {
+        if(value==0){
+            value='正常'
+        }else{
+            value='暂停'
+        }
+        return value
+    }
+    
+    function dateFornullr(value, row, index) {
+        if(value=="null"){
+            value=''
+        }
+        return value
+    }
+    function change(status,Id){
+        
+        $.ajax({
+        url: '/user/get/transactionRecord_change',
+        type: 'get',
+        data: {
+            status:status,
+            remark:$("#textarea"+Id).val(),
+            Id:Id
+        },
+        success: function(json){
+                if(json.msg=="ok"){
+                    datatable.bootstrapTable('refresh');
+                }
+        },
+        error: function(error){
+            console.log(error);
+            localStorage.clear();
+            location.href='/login';
+        }
+    });
+    }
+
+
+    function changeId(Id){
+        if($("#room"+Id).val()==""){
+            alert("请填写正确房间ID")
+        }
+        $.ajax({
+        url: '/user/get/transactionRecord_changeId',
+        type: 'get',
+        data: {
+            newid:$("#room"+Id).val(),
+            remark:$("#textarea"+Id).val(),
+            Id:Id
+        },
+        success: function(json){
+                if(json.msg=="ok"){
+                    datatable.bootstrapTable('refresh');
+                }
+        },
+        error: function(error){
+            console.log(error);
+            localStorage.clear();
+            location.href='/login';
+        }
+    });
+    }
+</script>
+</body>
+</html>

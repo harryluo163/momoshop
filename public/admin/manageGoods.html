@@ -1,0 +1,430 @@
+<!DOCTYPE HTML>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title></title>
+
+    <link href="../plugins/bootstrap-3.3.0/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="../plugins/material-design-iconic-font-2.2.0/css/material-design-iconic-font.min.css" rel="stylesheet"/>
+    <link href="../plugins/bootstrap-table-1.11.0/bootstrap-table.min.css" rel="stylesheet"/>
+    <link href="../plugins/waves-0.7.5/waves.min.css" rel="stylesheet"/>
+    <link href="../plugins/jquery-confirm/jquery-confirm.min.css" rel="stylesheet"/>
+    <link href="../plugins/select2/css/select2.min.css" rel="stylesheet"/>
+
+    <link href="../css/common.css" rel="stylesheet"/>
+</head>
+<style>
+    .gname{}
+    .gtype{}
+    .ta-line{
+        height: 2px;
+        width: 100%;
+        background-color: #dddddd;
+        margin-top: 5px;
+        /*margin-left: 5px;*/
+        /*margin-right: 5px;*/
+    }
+</style>
+<body>
+<div id="main">
+    <table id="tableGoodsName"></table>
+    <div class="ta-line"></div>
+    <table id="tableGoodsType"></table>
+    <div class="ta-line"></div>
+    <table id="tableGoodsValue"></table>
+</div>
+<script src="../plugins/jquery.1.12.4.min.js"></script>
+<script src="../plugins/bootstrap-3.3.0/js/bootstrap.min.js"></script>
+<script src="../plugins/bootstrap-table-1.11.0/bootstrap-table.min.js"></script>
+<script src="../plugins/bootstrap-table-1.11.0/locale/bootstrap-table-zh-CN.min.js"></script>
+<script src="../plugins/waves-0.7.5/waves.min.js"></script>
+<script src="../plugins/jquery-confirm/jquery-confirm.min.js"></script>
+<script src="../plugins/select2/js/select2.min.js"></script>
+<script src="../js/bootstrap-table-super-search.js"></script>
+
+<script src="../js/common.js"></script>
+<script>
+    var $table = $('#tableGoodsValue');
+    var $tableGname=$('#tableGoodsName');
+    var $tableGtype=$('#tableGoodsType');
+    $(function() {
+        $(document).on('focus', 'input[type="text"]', function() {
+            $(this).parent().find('label').addClass('active');
+        }).on('blur', 'input[type="text"]', function() {
+            if ($(this).val() == '') {
+                $(this).parent().find('label').removeClass('active');
+            }
+        });
+        $table.bootstrapTable({
+            url: '/admin/get/goods',
+            method:'get',
+            striped: true,
+            search: false,
+            searchOnEnterKey: true,
+            superSearch:false,
+            showColumns: false,
+            minimumCountColumns: 2,
+            clickToSelect: true,
+            detailFormatter: 'detailFormatter',
+            pagination: true,
+            paginationLoop: false,
+            classes: 'table table-hover table-no-bordered',
+            sidePagination: 'server',
+            smartDisplay: true,
+            idField: 'id',
+            uniqueId:'id',
+            escape: true,
+            showRefresh:true,
+            showToggle:true,
+            toolbar: '#toolbar',
+            columns: [
+                {field: 'state', checkbox: true},
+                {field: 'id', title: 'ID', align: 'center'},
+                {field: 'goodsName', title: '商品', align: 'center'},
+                {field: 'goodsType', title: '类型', align: 'center'},
+                {field: 'goodsValue', title: '价格', align: 'center'},
+                {field: 'action', title: '操作', align: 'center', formatter: 'actionFormatter', events: 'actionEvents', clickToSelect: false}
+            ],
+        }).on('all.bs.table', function (e, name, args) {
+            $('[data-toggle="tooltip"]').tooltip();
+            $('[data-toggle="popover"]').popover();
+        });
+        $tableGname.bootstrapTable({
+            url: '/admin/get/goodsName',
+            method:'get',
+            striped: true,
+            search: false,
+            searchOnEnterKey: true,
+            superSearch:false,
+            showColumns: false,
+            minimumCountColumns: 2,
+            clickToSelect: true,
+            detailFormatter: 'detailFormatter',
+            pagination: false,
+            paginationLoop: false,
+            classes: 'table table-hover',
+            sidePagination: 'server',
+            smartDisplay: true,
+            idField: 'id',
+            uniqueId:'id',
+            escape: true,
+            showRefresh:true,
+            showToggle:true,
+            toolbar: '#toolbar',
+            columns: [
+                {field: 'state', checkbox: true},
+                {field: 'id', title: 'ID', align: 'center'},
+                {field: 'goodsName', title: '商品名', align: 'center'},
+                {field: 'action', title: '操作', align: 'center', formatter: 'ntActionFormatter', events: 'nameActionEvent', clickToSelect: false}
+            ],
+        }).on('all.bs.table', function (e, name, args) {
+            $('[data-toggle="tooltip"]').tooltip();
+            $('[data-toggle="popover"]').popover();
+        });
+        $tableGtype.bootstrapTable({
+            url: '/admin/get/goodsType',
+            method:'get',
+            striped: true,
+            search: false,
+            searchOnEnterKey: true,
+            superSearch:false,
+            showColumns: false,
+            minimumCountColumns: 2,
+            clickToSelect: true,
+            detailFormatter: 'detailFormatter',
+            pagination: false,
+            paginationLoop: false,
+            classes: 'table table-hover',
+            sidePagination: 'server',
+		    smartDisplay: true,
+            idField: 'id',
+            uniqueId:'id',
+            escape: true,
+            showRefresh:true,
+            showToggle:true,
+            toolbar: '#toolbar',
+            columns: [
+                {field: 'state', checkbox: true},
+                {field: 'id', title: 'ID', align: 'center'},
+                {field: 'goodsType', title: '类型', align: 'center'},
+                {field: 'action', title: '操作', align: 'center', formatter: 'ntActionFormatter', events: 'typeActionEvent', clickToSelect: false}
+            ],
+        }).on('all.bs.table', function (e, name, args) {
+            $('[data-toggle="tooltip"]').tooltip();
+            $('[data-toggle="popover"]').popover();
+        });
+    });
+    function ntActionFormatter(value, row, index) {
+        return [
+            '<a class="edit ml10" href="javascript:void(0)" data-toggle="tooltip" title="修改"><i class="glyphicon glyphicon-edit"></i></a>　',
+            '<a class="remove ml10" href="javascript:void(0)" data-toggle="tooltip" title="删除"><i class="glyphicon glyphicon-remove"></i></a>'
+        ].join('');
+    }
+    function actionFormatter(value, row, index) {
+        return [
+            '<a class="edit ml10" href="javascript:void(0)" data-toggle="tooltip" title="修改"><i class="glyphicon glyphicon-edit"></i></a>　',
+            '<a class="remove ml10" href="javascript:void(0)" data-toggle="tooltip" title="删除"><i class="glyphicon glyphicon-remove"></i></a>'
+        ].join('');
+    }
+
+    window.actionEvents = {
+        'click .edit': function (e, value, row, index) {
+            $.confirm({
+                title:'修改积分值',
+                content:'    <div class="form-group">\n' +
+                '        <label>积分值：</label>\n' +
+                '        <input type="text" placeholder="'+row.goodsValue+ '" class="gname form-control">\n' +
+                '    </div>',
+                buttons:{
+                    confirm:{
+                        text:'修改',
+                        action:function () {
+                            let coin=this.$content.find('.gname').val();
+                            if(isNaN(coin)){
+                                $.alert({
+                                    content:'输入积分有错误，请重新输入！',
+                                    title:false,
+                                    closeIcon:false
+                                });
+                                return ;
+                            }
+                            $.ajax({
+                                url: '/admin/modify/goodsCoin',
+                                type: 'POST',
+                                data: {id:row.id,coin:coin},
+                                success: function(json){
+                                    if(json.status){
+                                        $.alert({
+                                            content:'修改错误！',
+                                            title:false,
+                                            closeIcon:false
+                                        });
+                                    }else{
+                                        $table.bootstrapTable('updateByUniqueId', {
+                                            id: row.id,
+                                            row: {goodsValue:coin,}
+                                        });
+                                        $.alert({
+                                            content:'修改成功！',
+                                            title:false,
+                                            closeIcon:false
+                                        });
+                                    }
+                                },
+                                error: function(error){
+                                    console.log(error);
+                                }
+                            });
+                        }
+                    },
+                    cancel:{
+                        text:'取消'
+                    }
+                }
+            });
+        },
+        'click .remove': function (e, value, row, index) {
+            var userRows = $table.bootstrapTable('getSelections');
+            if(JSON.stringify(userRows).indexOf(row.id)!=-1){
+                $.ajax({
+                    url: '/admin/delete/goodsvalue',
+                    type: 'POST',
+                    data: {id:row.id},
+                    success: function(json){
+                        if(json.status){
+                            $.alert({
+                                content:'删除错误！',
+                                title:false,
+                                closeIcon:false
+                            });
+                        }else{
+                            $table.bootstrapTable('removeByUniqueId',row.id);
+                            $.alert({
+                                content:'删除成功！',
+                                title:false,
+                                closeIcon:false
+                            });
+                        }
+                    },
+                    error: function(error){
+                        console.log(error);
+                    }
+                });
+            }else{
+                $.alert({content:'请先选择你要删除的商品！', title:false, closeIcon:false});
+            }
+        }
+    };
+    window.nameActionEvent={
+        'click .edit': function (e, value, row, index) {
+            $.confirm({
+                title:'修改产品名',
+                content:'    <div class="form-group">\n' +
+                '        <label>产品名：</label>\n' +
+                '        <input type="text" placeholder="'+row.goodsName+ '" class="gname form-control">\n' +
+                '    </div>',
+                buttons:{
+                    confirm:{
+                        text:'修改',
+                        action:function () {
+                            let name=this.$content.find('.gname').val();
+                            $.ajax({
+                                url: '/admin/modify/goodsName',
+                                type: 'POST',
+                                data: {id:row.id,name:name},
+                                success: function(json){
+                                    if(json.status){
+                                        $.alert({
+                                            content:'修改错误！',
+                                            title:false,
+                                            closeIcon:false
+                                        });
+                                    }else{
+                                        $tableGname.bootstrapTable('updateByUniqueId', {
+                                            id: row.id,
+                                            row: {goodsName:name,}
+                                        });
+                                        $.alert({
+                                            content:'修改成功！',
+                                            title:false,
+                                            closeIcon:false
+                                        });
+                                    }
+                                },
+                                error: function(error){
+                                    console.log(error);
+                                }
+                            });
+                        }
+                    },
+                    cancel:{
+                        text:'取消'
+                    }
+                }
+            });
+        },
+        'click .remove': function (e, value, row, index) {
+            var userRows = $tableGname.bootstrapTable('getSelections');
+            if(JSON.stringify(userRows).indexOf(row.id)!=-1){
+                $.ajax({
+                    url: '/admin/delete/goodsName',
+                    type: 'POST',
+                    data: {id:row.id},
+                    success: function(json){
+                        if(json.status){
+                            $.alert({
+                                content:'删除错误！',
+                                title:false,
+                                closeIcon:false
+                            });
+                        }else{
+                            $tableGname.bootstrapTable('removeByUniqueId',row.id);
+                            $.alert({
+                                content:'删除成功！',
+                                title:false,
+                                closeIcon:false
+                            });
+                        }
+                    },
+                    error: function(error){
+                        console.log(error);
+                    }
+                });
+            }else{
+                $.alert({content:'请先选择你要删除的商品名！', title:false, closeIcon:false});
+            }
+        }
+    };
+    window.typeActionEvent={
+        'click .edit': function (e, value, row, index) {
+            $.confirm({
+                title:'修改产品名',
+                content:'    <div class="form-group">\n' +
+                '        <label>产品名：</label>\n' +
+                '        <input type="text" placeholder="'+row.goodsType+ '" class="gtype form-control">\n' +
+                '    </div>',
+                buttons:{
+                    confirm:{
+                        text:'修改',
+                        action:function () {
+                            let type=this.$content.find('.gtype').val();
+                            $.ajax({
+                                url: '/admin/modify/goodsType',
+                                type: 'POST',
+                                data: {id:row.id,type:type},
+                                success: function(json){
+                                    if(json.status){
+                                        $.alert({
+                                            content:'修改错误',
+                                            title:false,
+                                            closeIcon:false
+                                        });
+                                    }else{
+                                        $tableGtype.bootstrapTable('updateByUniqueId', {
+                                            id: row.id,
+                                            row: {goodsType:type,}
+                                        });
+                                        $.alert({
+                                            content:'修改成功成功！',
+                                            title:false,
+                                            closeIcon:false
+                                        });
+                                    }
+                                },
+                                error: function(error){
+                                    console.log(error);
+                                }
+                            });
+                        }
+                    },
+                    cancel:{
+                        text:'取消'
+                    }
+                }
+            });
+        },
+        'click .remove': function (e, value, row, index) {
+            var userRows = $tableGtype.bootstrapTable('getSelections');
+            if(JSON.stringify(userRows).indexOf(row.id)!=-1){
+                $.ajax({
+                    url: '/admin/delete/goodsType',
+                    type: 'POST',
+                    data: {id:row.id},
+                    success: function(json){
+                        if(json.status){
+                            $.alert({
+                                content:'删除错误！',
+                                title:false,
+                                closeIcon:false
+                            });
+                        }else{
+                            $tableGtype.bootstrapTable('removeByUniqueId',row.id);
+                            $.alert({
+                                content:'删除成功！',
+                                title:false,
+                                closeIcon:false
+                            });
+                        }
+                    },
+                    error: function(error){
+                        console.log(error);
+                    }
+                });
+            }else{
+                $.alert({content:'请先选择你要删除的商品类型！', title:false, closeIcon:false});
+            }
+        }
+    };
+
+    function detailFormatter(index, row) {
+        var html = [];
+        $.each(row, function (key, value) {
+            html.push('<p><b>' + key + ':</b> ' + value + '</p>');
+        });
+        return html.join('');
+    }
+</script>
+</body>
+</html>

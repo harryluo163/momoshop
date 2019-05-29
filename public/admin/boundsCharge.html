@@ -1,0 +1,104 @@
+<!DOCTYPE HTML>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title></title>
+
+    <link href="../plugins/bootstrap-3.3.0/css/bootstrap.min.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="../css/bootstrap-select.css">
+    <link href="../plugins/material-design-iconic-font-2.2.0/css/material-design-iconic-font.min.css" rel="stylesheet"/>
+    <link href="../plugins/waves-0.7.5/waves.min.css" rel="stylesheet"/>
+    <link href="../plugins/jquery-confirm/jquery-confirm.min.css" rel="stylesheet"/>
+    <link href="../css/common.css" rel="stylesheet"/>
+</head>
+<style>
+    .mm-center{
+        margin: 0 auto;
+        width: 300px;
+    }
+    .mm-50{
+        margin-top: 50px;
+    }
+    .mm-h{
+        margin-top: 20px;
+    }
+    .mm-w{
+        width: 300px;
+    }
+</style>
+<body>
+<div id="main">
+    <div class="container">
+        <div class="mm-center mm-50">
+            <div class="input-group mm-h">
+                <span class="input-group-addon" >充值账户：</span>
+                <input id="i-username" type="text" class="form-control" placeholder="请输入充值账户">
+            </div>
+            <div class="input-group mm-h">
+                <span class="input-group-addon" >确认账户：</span>
+                <input id="s-username" type="text" class="form-control" placeholder="请再次确认要账户">
+            </div>
+            <div class="input-group mm-h">
+                <span class="input-group-addon">充值积分：</span>
+                <input id="i-coin" type="text" class="form-control">
+                <span class="input-group-addon">积分</span>
+            </div>
+            <p class="mm-h"><input type="button" class="btn btn-success mm-w" id="charge" value="开始充值"></p>
+        </div>
+    </div>
+</div>
+<script src="../plugins/jquery.1.12.4.min.js"></script>
+<script src="../plugins/bootstrap-3.3.0/js/bootstrap.min.js"></script>
+<script src="../plugins/waves-0.7.5/waves.min.js"></script>
+<script src="../plugins/jquery-confirm/jquery-confirm.min.js"></script>
+
+<script>
+    $('#charge').click(function () {
+        if($('#i-username').val().trim()!=$('#s-username').val().trim()){
+            $.alert({
+                content:'两次用户名不相同，请重新输入！',
+                title:false,
+                closeIcon:false
+            });
+            return ;
+        }
+        if($('#i-coin').val().trim()==''||$('#i-coin').val().trim()==undefined){
+            $.alert({
+                content:'未输入充值积分',
+                title:false,
+                closeIcon:false
+            });
+            return ;
+        }
+        $.ajax({
+            url: '/admin/charge',
+            type: 'POST',
+            data: {
+                username: $('#i-username').val().trim(),
+                coin:$('#i-coin').val().trim()
+            },
+            success: function(json){
+                if(json.status){
+                    $.alert({
+                        content:'充值失败！',
+                        title:false,
+                        closeIcon:false
+                    });
+                }else{
+                    $.alert({
+                        content:'充值成功！',
+                        title:false,
+                        closeIcon:false
+                    });
+                }
+            },
+            error: function(error){
+                console.log(error);
+            }
+        });
+    });
+</script>
+</body>
+</html>
