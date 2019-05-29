@@ -119,6 +119,15 @@
             $('[data-toggle="tooltip"]').tooltip();
             $('[data-toggle="popover"]').popover();
         });
+        $("#eDate").datepicker('remove');
+        $("#eDate").datepicker({
+            startView: 0,
+            maxViewMode: 1,
+            minViewMode: 0,
+            language: 'zh-cn',
+            format: 'yyyy-mm-dd',
+            autoclose: true
+        });
     });
     function _queryData(){
         $table.bootstrapTable('refresh');
