@@ -172,7 +172,8 @@
         return html.join('');
     }
     function dateFormatter(value, row, index) {
-        return formatDate(new Date(value/1),"yyyy-MM-dd hh:mm:ss");
+        // return formatDate(new Date(value/1),"yyyy-MM-dd hh:mm:ss");
+        return new Date(value/1);
     }
     function dateFormatter2(value, row, index) {
         if(value==0){

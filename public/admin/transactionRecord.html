@@ -196,7 +196,7 @@
         return html.join('');
     }
     function dateFormatter(value, row, index) {
-        return formatDate(new Date(value/1),"yyyy-MM-dd hh:mm:ss");
+        return new Date(value/1);
     }
     window.actionEvents = {
         'click .edit': function (e, value, row, index) {
