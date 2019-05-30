@@ -158,11 +158,7 @@
     function _queryData(){
         $table.bootstrapTable('refresh');
     }
-    function ntActionFormatter(value, row, index) {
-        return   '<a class="edit ml10" href="javascript:void(0)" data-toggle="tooltip" title="修改"><i class="glyphicon glyphicon-edit"></i></a>　';
 
-
-    }
     function dateFornullr(value, row, index) {
         if(value=="null"){
             value=''
@@ -174,18 +170,21 @@
             value='正常'
         }else if(value==1){
             value='暂停'
-        }else {
-            value='订单已取消'
         }
         return value
     }
     function actionFormatter(value, row, index) {
-        return [
-            '<a class="edit ml10" href="javascript:void(0)" data-toggle="tooltip" title="修改"><i class="glyphicon glyphicon-edit"></i>上号</a>',
+        if(row.status==2){
+            return ''
+        }else{
+            return [
+                '<a class="edit2 ml10" href="javascript:void(0)" data-toggle="tooltip" title="修改"><i class="glyphicon glyphicon-edit"></i>上号</a>',
 
-            '<a class="edit ml10" href="javascript:void(0)" data-toggle="tooltip" title="修改"><i class="glyphicon glyphicon-edit"></i>编辑</a>',
-            '<a class="remove ml10" href="javascript:void(0)" data-toggle="tooltip" title="取消订单"><i class="glyphicon glyphicon-remove">取消订单</i></a>'
-        ].join('');
+                '<a class="edit ml10" href="javascript:void(0)" data-toggle="tooltip" title="修改"><i class="glyphicon glyphicon-edit"></i>编辑</a>',
+                '<a class="remove ml10" href="javascript:void(0)" data-toggle="tooltip" title="取消订单"><i class="glyphicon glyphicon-remove">取消订单</i></a>'
+            ].join('');
+        }
+
     }
 
     function detailFormatter(index, row) {
@@ -196,7 +195,7 @@
         return html.join('');
     }
     function dateFormatter(value, row, index) {
-        return new Date(value/1);
+        return formatDate(new Date(value/1),"yyyy-MM-dd hh:mm:ss");
     }
     window.actionEvents = {
         'click .edit': function (e, value, row, index) {
@@ -209,10 +208,6 @@
                 ck1=""
                 ck2="checked"
                 ck3=""
-            }else {
-                ck1=""
-                ck2=""
-                ck3="checked"
             }
             $.confirm({
                 title: '修改订单',
@@ -227,9 +222,6 @@
                     '    </label>\n' +
                     '    <label class="radio-inline">\n' +
                     '        <input type="radio" name="status'+row.Id+'" id=""  value="1" '+ck2+'> 暂停' +
-                    '    </label>' +
-                    '    <label class="radio-inline">\n' +
-                    '        <input type="radio" name="status'+row.Id+'" id=""  value="2" '+ck3+'> 取消订单' +
                     '    </label>' +
                     '    </div>'+
                     '    <div class="form-group">\n' +
@@ -269,11 +261,33 @@
                 }
             });
         },
+        'click .edit2': function (e, value, row, index) {
+            $.confirm({
+                title: '消息提醒',
+                content: '  是否上号',
+                buttons: {
+                    confirm: {
+                        text: '确定',
+                        action: function () {
+                            $.alert({
+                                content:'上号成功！',
+                                title:false,
+                                closeIcon:false
+                            });
+
+                        }
+                    },
+                    cancel: {
+                        text: '取消'
+                    }
+                }
+            });
+        },
         'click .remove': function (e, value, row, index) {
             $.ajax({
-                url: '/admin/get/transactionRecord_changeid',
-                type: 'get',
-                data: {Id:row.id},
+                url: '/admin/cancel/order',
+                type: 'POST',
+                data: {orderId:row.id},
                 success: function(json){
                     if(json.error){
                         $.alert({
@@ -282,13 +296,12 @@
                             closeIcon:false
                         });
                     }else{
-
+                        $table.bootstrapTable('removeByUniqueId',row.id);
                         $.alert({
                             content:'取消订单成功！',
                             title:false,
                             closeIcon:false
                         });
-                        $table.bootstrapTable('refresh');
                     }
                 },
                 error: function(error){

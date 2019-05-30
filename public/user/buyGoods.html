@@ -120,8 +120,9 @@
             url: '/user/all/goods',
             type: 'GET',
             success: function (data) {
-                allGoods=data;
-                data.forEach(function (goods) {
+                allGoods=data.rows;
+                $("#current-coin").text(data.coin)
+                data.rows.forEach(function (goods) {
                     $('#buygg').append('<div class="col-xs-12 col-sm-6 col-md-4 mtb">\n' +
                         '                <div class="input-group">\n' +
                         '                    <span class="input-group-addon">\n' +
@@ -274,6 +275,8 @@
             }
         });
     }
+
+
 </script>
 </body>
 </html>

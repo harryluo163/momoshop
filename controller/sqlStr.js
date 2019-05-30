@@ -9,7 +9,7 @@ module.exports={
     'select goodsvalue.id, goods.name as goodsName,goodstype.type as goodsType,goodsvalue.value as goodsValue from goods,goodstype,goodsvalue ' +
     'where goodsvalue.goodsId=goods.id and goodsvalue.goodsTypeId=goodstype.id limit ?,?',
     buyGoods:'select goodsvalue.id as id,goods.name as goodsName,goodstype.type as goodsType,goodsvalue.value as goodsValue from goods,goodstype,goodsvalue ' +
-    'where goodsvalue.goodsId=goods.id and goodsvalue.goodsTypeId=goodstype.id',
+    'where goodsvalue.goodsId=goods.id and goodsvalue.goodsTypeId=goodstype.id;',
     addTransactionRecord:'insert into orders(id,room,goods,num,price,createBy,createAt,endDate,coin)values(?,?,?,?,?,?,?,?,?);',
     userGetTransactionRecord:'select count(*) as total from orders where createBy=?;select orders.id, orders.status, orders.remark,user.username,orders.room,orders.goods,orders.num,orders.price,orders.createAt,orders.endDate' +
     ' from orders,user where user.id=orders.createBy and orders.createBy=? ORDER BY createAt DESC limit ?,?',
@@ -35,8 +35,8 @@ module.exports={
     modifyGCoin:'update goodsvalue set value=? where id=?',
     orderById:'select * from orders where id=?',
     deleteOrder:'delete from order where id=?',
-    cancelOrder:'INSERT INTO orders_delete(`id`, `room`, `goods`, `num`, `price`, `createBy`, `createAt`, `endDate`) (SELECT `id`, `room`, `goods`, `num`, `price`, `createBy`, `createAt`, `endDate` FROM orders WHERE orders.id = ?);' +
-    'update user set coin=? where id=?;delete from orders where id=?',
+    cancelOrder:'INSERT INTO orders_delete(SELECT * FROM orders WHERE orders.id = ?);' +
+    'update user set coin=? where id=?;update orders set status =2 where id=?',
     goodsValue:'select goods.name as gName, goodstype.type as gType,goodsvalue.value as gValue from goods, goodsvalue,goodstype ' +
     'where goodsvalue.id=? and goodsvalue.goodsTypeId=goodstype.id and goodsvalue.goodsId=goods.id',
     substractUserCoin:'update user set coin=(if(coin>=?,coin-?,coin)) where id=?'

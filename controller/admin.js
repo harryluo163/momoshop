@@ -17,7 +17,7 @@ exports.checkUser = function (req,res,next) {
             res.json({status:'不存在该用户'});
             return;
         }
-        req.session.user={id:req.body.id,username:req.body.username,password:req.body.password,role:rows[0].role};
+        req.session.user={id:rows[0].id,username:req.body.username,password:req.body.password,role:rows[0].role};
         res.json({status:err,role:rows[0].role=='admin'?'1':'2',id:rows[0].id,coin:rows[0].coin});
     });
 };
@@ -92,7 +92,13 @@ exports.buyGoods=function (req,res) {
             res.json({});
             return;
         }
-        res.json(rows);
+        dbFunc.connectPool("select coin from user where id ='"+req.session.user.id+"'",(err,rows2)=>{
+            res.json({
+                rows:rows,
+                coin:rows2[0].coin
+            });
+        })
+
     });
 };
 
