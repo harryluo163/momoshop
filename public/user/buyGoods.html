@@ -111,32 +111,6 @@
 <script  src="../js/randomWord.js"></script>
 
 <script>
-    function huadong() {
-
-        var startX, startY, endX, endY;
-        document.getElementById("wrapper").addEventListener("touchstart",
-        touchStart, false);
-        document.getElementById("wrapper").addEventListener("touchmove", touchMove,
-        false);
-        document.getElementById("wrapper").addEventListener("touchend", touchEnd,
-        false);
-        function touchStart(event) {
-        var touch = event.touches[0];
-        startY = touch.pageY;
-        startX = touch.pageX;
-        }
-        function touchMove(event) {
-        var touch = event.touches[0];
-        endX = touch.pageX;
-        }
-        function touchEnd(event) {
-        if ((startX - endX) > 100) {
-        parent.$("#oiframes").attr('src', 'hzlb.html');//页面跳转
-        } else if ((endX - startX) > 100) {
-        parent.$("#oiframes").attr('src', 'hlxq.html');//页面跳转
-        }
-        }
-        }
 
     var goods_num=1,goods_single_price=undefined,allGoods,gvId;
     $(document).ready(function() {

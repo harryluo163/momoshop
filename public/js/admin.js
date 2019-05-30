@@ -185,7 +185,7 @@ var Tab = {
 		}
 		// 关闭侧边栏
 		$('#guide').trigger(click);
-
+		$("#iframe_"+ index).find("iframe").attr("src",url)
 
 	},
 	closeTab: function($item) {

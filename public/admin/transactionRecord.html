@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title></title>
 
     <link href="../plugins/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet"/>
@@ -18,6 +18,9 @@
 
     <link href="../css/common.css" rel="stylesheet"/>
 </head>
+<style>
+    .table-no-bordered{height: 500px}
+</style>
 <body>
 <div id="main">
     <div class="panel panel-default" style="margin: 0px 0px 0px 0px ">
@@ -49,7 +52,7 @@
 
         </div>
     </div>
-    <table id="table"></table>
+    <table id="tableGoodsValue"></table>
 </div>
 <script src="../plugins/jquery.1.12.4.min.js"></script>
 <script src="../plugins/bootstrap-3.3.0/js/bootstrap.min.js"></script>
@@ -65,7 +68,7 @@
 
 <script src="../js/common.js"></script>
 <script>
-    var $table = $('#table');
+    var $table = $('#tableGoodsValue');
     $(function() {
         $(document).on('focus', 'input[type="text"]', function() {
             $(this).parent().find('label').addClass('active');
@@ -78,7 +81,7 @@
         $table.bootstrapTable({
             url: '/user/get/transactionRecord',
             method:'get',
-            height: getHeight(),
+
             striped: true,
             queryParams : function(params) {
                 return {
@@ -154,7 +157,7 @@
     function actionFormatter(value, row, index) {
         return [
             '<a class="edit ml10" href="javascript:void(0)" data-toggle="tooltip" title="修改"><i class="glyphicon glyphicon-edit"></i>编辑</a>',
-        '<a class="remove ml10" href="javascript:void(0)" data-toggle="tooltip" title="取消订单"><i class="glyphicon glyphicon-remove">取消订单</i></a>'
+            '<a class="remove ml10" href="javascript:void(0)" data-toggle="tooltip" title="取消订单"><i class="glyphicon glyphicon-remove">取消订单</i></a>'
         ].join('');
     }
 
