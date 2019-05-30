@@ -17,6 +17,9 @@ module.exports={
             }
         }
         return fmt
+    },
+    fortimestamp  (date, fmt) {
+        return  Date.parse(date);
     }
 };
 

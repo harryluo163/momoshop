@@ -99,7 +99,7 @@ exports.buyGoods=function (req,res) {
 exports.addTransactionRecord=function (req,res) {
     let id=req.body.id,roomId=parseInt(req.body.roomId);
     let createBy=req.body.userId,num=parseInt(req.body.num),gvId=parseInt(req.body.gvId);
-    let createAt=utils.formatDate(new Date(), 'yyyy-MM-dd hh:mm:ss');
+    let createAt=utils.fortimestamp(new Date(), 'yyyy-MM-dd hh:mm:ss');
     let endDate=undefined;
     let timeType,singlePrice,goodName;
     dbFunc.connectPool(sqlStr.goodsValue,[gvId],(err,rows)=>{
@@ -115,23 +115,23 @@ exports.addTransactionRecord=function (req,res) {
         if(timeType=='单次'){
             let curDate=new Date();
             curDate.setUTCHours(curDate.getUTCHours()+6);
-            endDate=utils.formatDate(curDate, 'yyyy-MM-dd hh:mm:ss')
+            endDate=utils.fortimestamp(curDate, 'yyyy-MM-dd hh:mm:ss')
         } else if(timeType=='包天'){
             let curDate=new Date();
             curDate.setUTCDate(curDate.getUTCDate()+1);
-            endDate=utils.formatDate(curDate, 'yyyy-MM-dd hh:mm:ss')
+            endDate=utils.fortimestamp(curDate, 'yyyy-MM-dd hh:mm:ss')
         }else if(timeType=='包周'){
             let curDate=new Date();
             curDate.setUTCDate(curDate.getUTCDate()+7);
-            endDate=utils.formatDate(curDate, 'yyyy-MM-dd hh:mm:ss')
+            endDate=utils.fortimestamp(curDate, 'yyyy-MM-dd hh:mm:ss')
         }else if(timeType=='半月'){
             let curDate=new Date();
             curDate.setUTCDate(curDate.getUTCDate()+15);
-            endDate=utils.formatDate(curDate, 'yyyy-MM-dd hh:mm:ss')
+            endDate=utils.fortimestamp(curDate, 'yyyy-MM-dd hh:mm:ss')
         }else{
             let curDate=new Date();
             curDate.setUTCMonth(curDate.getUTCMonth()+1);
-            endDate=utils.formatDate(curDate, 'yyyy-MM-dd hh:mm:ss')
+            endDate=utils.fortimestamp(curDate, 'yyyy-MM-dd hh:mm:ss')
         }
         dbFunc.getConnection(function (err, conn) {
             if (err) {
