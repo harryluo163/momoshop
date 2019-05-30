@@ -26,7 +26,7 @@
     <div class="panel panel-default" style="margin: 0px 0px 0px 0px ">
         <div class="panel-body">
             <div class="row" style="margin-top: 10px;margin-left: 0px;margin-bottom: 14px">
-
+                <div class="col-xs-12 col-sm-4" style="margin-top: 5px">
                     <select id="select" style="    height: 36px;
                                   float: left;
                                   margin-right: 10px;
@@ -47,18 +47,19 @@
                         <option value="2">已取消</option>
                     </select>
 
+                </div>
+                <div class="col-xs-12 col-sm-4"style="margin-top: 5px">
+                    <input type="text" class="form-control" style="width: 120px;float: left; margin-right: 10px" placeholder="结束时间" id="eDate" name="eDate" value=""  >
 
-                <input type="text" class="form-control" style="width: 120px;float: left;" placeholder="结束时间" id="eDate" name="eDate" value="" >
-                <input type="text" class="form-control" style="width: 120px;float: left;" placeholder="房间号 备注" id="roomid" value="" >
+                    <input type="text" class="form-control" style="width: 120px;float: left;" placeholder="房间号 备注" id="roomid" value="" >
 
-
-
+                </div>
+                <div class="col-xs-12 col-sm-4"style="margin-top: 5px">
+                    <button type="button" class="col-sm-1 btn btn-danger btn-sm" style="margin-left: 15px;float:none;width: 58px;float: left;" onclick="_queryData();">查询
+                    </button>
+                </div>
             </div>
-            <div class="row">
 
-                <button type="button" class="col-sm-1 btn btn-danger btn-sm" style="margin-left: 15px;float:none;width: 58px;float: left;" onclick="_queryData();">查询
-                </button>
-            </div>
 
 
         </div>
