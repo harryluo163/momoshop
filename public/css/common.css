@@ -1,12 +1,16 @@
 body, html {
-    /*overflow-x:hidden; */
+    overflow-x:hidden;
     width: 100%;
+
+
+    -webkit-transform: translateZ(0);
     /*height: 100%; */
     /*position: relative; */
     font-family: 'Microsoft yahei';
     font-size: 13px;
     font-weight: 400;
-}img {vertical-align: middle;}
+}
+img {vertical-align: middle;}
 a, a:hover, a:active, a:focus {text-decoration: none; -webkit-user-drag: none; outline: none; color: #000;}
 a i{font-size: 13px;}
 

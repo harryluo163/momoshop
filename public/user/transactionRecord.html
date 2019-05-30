@@ -30,6 +30,7 @@
                                 <option value="单次">单次</option>
                                 <option value="包天">包天</option>
                                 <option value="包周">包周</option>
+                                <option value="半月">半月</option>
                                 <option value="包月">包月</option>
                             </select>
                             <select id="select_status" style="    height: 36px;
@@ -60,6 +61,7 @@
             </div>
     <table id="tableGoodsValue" ></table>
     <div class="ta-line"></div>
+    <div style="height: 50px">&nbsp</div>
 </div>
 <script src="../plugins/jquery.1.12.4.min.js"></script>
 <script src="../plugins/bootstrap-3.3.0/js/bootstrap.min.js"></script>
@@ -158,7 +160,8 @@
     }
      function ntActionFormatter(value, row, index) {
           return [
-              '<a class="edit ml10" href="javascript:void(0)" data-toggle="tooltip" title="修改"><i class="glyphicon glyphicon-edit"></i>上号</a>',
+
+              '<a class="edit2 ml10" href="javascript:void(0)" data-toggle="tooltip" title="修改"><i class="glyphicon glyphicon-edit"></i>上号</a>',
               '<a class="edit ml10" href="javascript:void(0)" data-toggle="tooltip" title="修改"><i class="glyphicon glyphicon-edit">编辑</i></a>'
           ].join('');
 
@@ -239,6 +242,28 @@
                                      console.log(error);
                                  }
                              });
+                         }
+                     },
+                     cancel: {
+                         text: '取消'
+                     }
+                 }
+             });
+         },
+         'click .edit2': function (e, value, row, index) {
+             $.confirm({
+                 title: '消息提醒',
+                 content: '  是否上号',
+                 buttons: {
+                     confirm: {
+                         text: '确定',
+                         action: function () {
+                             $.alert({
+                                 content:'上号成功！',
+                                 title:false,
+                                 closeIcon:false
+                             });
+
                          }
                      },
                      cancel: {

@@ -139,7 +139,7 @@ a, a:hover, a:active, a:focus {text-decoration: none; -webkit-user-drag: none;}
 
 .content_main{height:calc(100% - 48px);-webkit-overflow-scrolling:touch;}
 .content_main>.cur{display:block;}
-.iframe{height:100%;display:none;}
+.iframe{height:100%;display:none;-webkit-overflow-scrolling: touch; overflow: auto;}
 
 
 #iframe_home{padding: 15px 30px; font-size: 13px;overflow:auto;}
