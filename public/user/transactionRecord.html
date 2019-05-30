@@ -166,15 +166,16 @@
     function dateFormatter2(value, row, index) {
         if(value==0){
             value='正常'
-        }else{
+        }else if(value==1){
             value='暂停'
+        }else {
+            value='订单已取消'
         }
         return value
     }
 
      window.nameActionEvent= {
          'click .edit': function (e, value, row, index) {
-             var status=row.status==0?"正常":"暂停";
              var ck1,ck2=""
              if(row.status==0){
                  ck1="checked"

@@ -27,16 +27,27 @@
         <div class="panel-body">
             <div class="row" style="margin-top: 10px;margin-left: 0px;margin-bottom: 14px">
 
-                <select name="" id="select" style="    height: 36px;
+                    <select id="select" style="    height: 36px;
                                   float: left;
                                   margin-right: 10px;
                                   border-radius: 4px;">
-                    <option value="">全部</option>
-                    <option value="单次">单次</option>
-                    <option value="包天">包天</option>
-                    <option value="包周">包周</option>
-                    <option value="包月">包月</option>
-                </select>
+                        <option value="">订单类型-全部</option>
+                        <option value="单次">单次</option>
+                        <option value="包天">包天</option>
+                        <option value="包周">包周</option>
+                        <option value="包月">包月</option>
+                    </select>
+                    <select id="select_status" style="    height: 36px;
+                                  float: left;
+                                  margin-right: 10px;
+                                  border-radius: 4px;">
+                        <option value="">订单状态-全部</option>
+                        <option value="0">正常</option>
+                        <option value="1">暂停</option>
+                        <option value="2">已取消</option>
+                    </select>
+
+
                 <input type="text" class="form-control" style="width: 120px;float: left;" placeholder="结束时间" id="eDate" name="eDate" value="" >
                 <input type="text" class="form-control" style="width: 120px;float: left;" placeholder="房间号 备注" id="roomid" value="" >
 
@@ -87,6 +98,7 @@
                 return {
                     select : $("#select").val(),
                     eDate : $("#eDate").val(),
+                    select_status:$("#select_status").val(),
                     roomId:$("#roomid").val()
                 };
             },
@@ -159,8 +171,10 @@
     function dateFormatter2(value, row, index) {
         if(value==0){
             value='正常'
-        }else{
+        }else if(value==1){
             value='暂停'
+        }else {
+            value='订单已取消'
         }
         return value
     }
@@ -185,14 +199,19 @@
     }
     window.actionEvents = {
         'click .edit': function (e, value, row, index) {
-            var status=row.status==0?"正常":"暂停";
-            var ck1,ck2=""
+            var ck1,ck2,ck3=""
             if(row.status==0){
                 ck1="checked"
                 ck2=""
-            }else{
+                ck3=""
+            }else if(row.status==1){
                 ck1=""
                 ck2="checked"
+                ck3=""
+            }else {
+                ck1=""
+                ck2=""
+                ck3="checked"
             }
             $.confirm({
                 title: '修改订单',
@@ -207,6 +226,9 @@
                     '    </label>\n' +
                     '    <label class="radio-inline">\n' +
                     '        <input type="radio" name="status'+row.Id+'" id=""  value="1" '+ck2+'> 暂停' +
+                    '    </label>' +
+                    '    <label class="radio-inline">\n' +
+                    '        <input type="radio" name="status'+row.Id+'" id=""  value="2" '+ck3+'> 取消订单' +
                     '    </label>' +
                     '    </div>'+
                     '    <div class="form-group">\n' +
@@ -248,9 +270,9 @@
         },
         'click .remove': function (e, value, row, index) {
             $.ajax({
-                url: '/admin/cancel/order',
-                type: 'POST',
-                data: {orderId:row.id},
+                url: '/admin/get/transactionRecord_changeid',
+                type: 'get',
+                data: {Id:row.id},
                 success: function(json){
                     if(json.error){
                         $.alert({
@@ -259,12 +281,13 @@
                             closeIcon:false
                         });
                     }else{
-                        $table.bootstrapTable('removeByUniqueId',row.id);
+
                         $.alert({
                             content:'取消订单成功！',
                             title:false,
                             closeIcon:false
                         });
+                        $table.bootstrapTable('refresh');
                     }
                 },
                 error: function(error){

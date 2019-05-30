@@ -43,7 +43,7 @@ router.get('/user/get/transactionRecord',function (req,res,next) {
 router.get('/user/get/transactionRecord_change',function (req,res,next) {
     admin.userGetTransactionRecord_change(req,res);
 });
-router.get('/user/get/transactionRecord_changeid',function (req,res,next) {
+router.get('/admin/get/transactionRecord_changeid',function (req,res,next) {
     admin.userGetTransactionRecord_changeid(req,res);
 });
 router.get('/admin/get/transactionRecord',function (req,res,next) {

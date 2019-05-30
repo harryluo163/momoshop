@@ -230,8 +230,12 @@ exports.userGetTransactionRecord=function (req,res) {
     if(eDate!=""&&eDate!=undefined){
         sqlParams2+=" and endDate <'"+eDate+" 23:59:59' "
     }
+
     if(req.query.roomId!=""&&req.query.roomId!=undefined){
         sqlParams2+=" and ( room like '%"+req.query.roomId+"%' or remark like '%"+req.query.roomId+"%') "
+    }
+    if(req.query.select_status!=""&&req.query.select_status!=undefined){
+        sqlParams2+=" and orders.status= '"+req.query.select_status+"' "
     }
     let sqlParams=[offset,limit];
     var sql ='select count(*) as total ' +
@@ -257,7 +261,7 @@ exports.userGetTransactionRecord_change=function (req,res) {
     });
 }
 exports.userGetTransactionRecord_changeid=function (req,res) {
-    dbFunc.connectPool("update orders set remark=?,room=? where id=?",[req.query.remark,req.query.newid,req.query.Id],(err,rows)=>{
+    dbFunc.connectPool("update orders set status=2 where id=?",[req.query.Id],(err,rows)=>{
         if(err){
             res.json({msg:"err"});
             return;
