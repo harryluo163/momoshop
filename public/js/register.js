@@ -28,7 +28,7 @@ function register() {
         data: {
             id:RandomWord('abcdefghijklmnopqrstuvwxyz1234567890').random(16),
             username: $('#username').val(),
-            password: $('#password').val(),
+            password:  $.md5($('#password').val()),
         },
         beforeSend: function() {
         },

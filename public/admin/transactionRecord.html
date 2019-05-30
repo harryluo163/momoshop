@@ -90,19 +90,23 @@
                     roomId:$("#roomid").val()
                 };
             },
+            search: false,
+            searchOnEnterKey: true,
+            superSearch:false,
             showColumns: false,
             minimumCountColumns: 2,
             clickToSelect: true,
             detailFormatter: 'detailFormatter',
             pagination: true,
             paginationLoop: false,
-            classes: 'table table-hover table-no-bordered',
+            classes: 'table table-hover ',
             sidePagination: 'server',
             smartDisplay: true,
-
+            idField: 'id',
+            uniqueId:'id',
             escape: true,
+            showRefresh:true,
             showToggle:true,
-            cardView:true,
             toolbar: '#toolbar',
             columns: [
                 {field: 'id', title: 'ID', align: 'center'},
@@ -131,6 +135,12 @@
             format: 'yyyy-mm-dd',
             autoclose: true
         });
+        // //获取网页正文全文宽
+        // var screenWidth = document.body.scrollWidth ;
+        // if(screenWidth <= 960){
+        //     $('#tableGoodsValue').css('width',600)
+        //     datatable.bootstrapTable('resetView')
+        // }
     });
     function _queryData(){
         $table.bootstrapTable('refresh');
@@ -156,6 +166,8 @@
     }
     function actionFormatter(value, row, index) {
         return [
+            '<a class="edit ml10" href="javascript:void(0)" data-toggle="tooltip" title="修改"><i class="glyphicon glyphicon-edit"></i>上号</a>',
+
             '<a class="edit ml10" href="javascript:void(0)" data-toggle="tooltip" title="修改"><i class="glyphicon glyphicon-edit"></i>编辑</a>',
             '<a class="remove ml10" href="javascript:void(0)" data-toggle="tooltip" title="取消订单"><i class="glyphicon glyphicon-remove">取消订单</i></a>'
         ].join('');

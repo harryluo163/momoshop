@@ -79,7 +79,6 @@
         datatable= $table.bootstrapTable({
             url: '/user/get/transactionRecord?id='+localStorage.getItem('id'),
             method:'get',
-
             striped: true,
             queryParams : function(params) {
              return {
@@ -136,13 +135,21 @@
             format: 'yyyy-mm-dd',
             autoclose: true
         });
-
+        // //获取网页正文全文宽
+        // var screenWidth = document.body.scrollWidth ;
+        // if(screenWidth <= 960){
+        //     $('#tableGoodsValue').css('width',600)
+        //     datatable.bootstrapTable('resetView')
+        // }
     });
     function _queryData(){
         datatable.bootstrapTable('refresh');
     }
      function ntActionFormatter(value, row, index) {
-         return   '<a class="edit ml10" href="javascript:void(0)" data-toggle="tooltip" title="修改"><i class="glyphicon glyphicon-edit">编辑</i></a>　';
+          return [
+              '<a class="edit ml10" href="javascript:void(0)" data-toggle="tooltip" title="修改"><i class="glyphicon glyphicon-edit"></i>上号</a>',
+              '<a class="edit ml10" href="javascript:void(0)" data-toggle="tooltip" title="修改"><i class="glyphicon glyphicon-edit">编辑</i></a>'
+          ].join('');
 
 
      }

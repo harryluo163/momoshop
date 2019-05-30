@@ -28,7 +28,7 @@ function login() {
 		type: 'POST',
 		data: {
 			username: $('#username').val(),
-			password: $('#password').val(),
+			password:   $.md5($('#password').val()),
 		},
 		beforeSend: function() {
 		},
