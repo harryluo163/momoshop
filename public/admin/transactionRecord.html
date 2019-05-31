@@ -172,6 +172,8 @@
             value='正常'
         }else if(value==1){
             value='暂停'
+        }else {
+            value='订单已取消'
         }
         return value
     }
@@ -183,8 +185,7 @@
                 '<a class="edit2 ml10" href="javascript:void(0)" data-toggle="tooltip" title="修改"><i class="glyphicon glyphicon-edit"></i>上号</a>',
 
                 '<a class="edit ml10" href="javascript:void(0)" data-toggle="tooltip" title="修改"><i class="glyphicon glyphicon-edit"></i>编辑</a>',
-                '<a class="remove ml10" href="javascript:void(0)" data-toggle="tooltip" title="取消订单"><i class="glyphicon glyphicon-remove">取消订单</i></a>'
-            ].join('');
+                ].join('');
         }
 
     }
@@ -210,6 +211,10 @@
                 ck1=""
                 ck2="checked"
                 ck3=""
+            }else {
+                ck1=""
+                ck2=""
+                ck3="checked"
             }
             $.confirm({
                 title: '修改订单',
@@ -224,6 +229,9 @@
                     '    </label>\n' +
                     '    <label class="radio-inline">\n' +
                     '        <input type="radio" name="status'+row.Id+'" id=""  value="1" '+ck2+'> 暂停' +
+                    '    </label>' +
+                    '    <label class="radio-inline">\n' +
+                    '        <input type="radio" name="status'+row.Id+'" id=""  value="2" '+ck3+'> 取消订单' +
                     '    </label>' +
                     '    </div>'+
                     '    <div class="form-group">\n' +

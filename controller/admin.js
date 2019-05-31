@@ -263,7 +263,12 @@ exports.userGetTransactionRecord_change=function (req,res) {
             res.json({msg:"err"});
             return;
         }
-        res.json({msg:"ok"});
+        if(req.query.status==2){
+            CancelOrder(req.query.Id,req,res)
+        }else{
+            res.json({msg:"ok"});
+        }
+
     });
 }
 exports.userGetTransactionRecord_changeid=function (req,res) {
@@ -394,6 +399,11 @@ exports.adminModifyGoodsCoin=function (req,res) {
 
 exports.adminCancelOrder=function (req,res) {
     let orderId = req.body.orderId;
+    CancelOrder(orderId,req,res)
+
+};
+
+function CancelOrder(orderId,req,res) {
     dbFunc.connectPool(sqlStr.orderById, [orderId], (err, rows) => {
         if (err) {
             res.json({error: '取消错误'});
@@ -458,4 +468,4 @@ exports.adminCancelOrder=function (req,res) {
 
         });
     });
-};
+}
