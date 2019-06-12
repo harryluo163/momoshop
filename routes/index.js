@@ -108,6 +108,7 @@ router.get('/server/detail', function (req, res) {
     server.serverDetail(req,res);
 });
 
+
 router.get('/server/users/status', function (req, res) {
     server.userStatus(req,res);
 });

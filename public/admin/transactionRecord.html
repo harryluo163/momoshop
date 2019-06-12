@@ -98,12 +98,12 @@
 
             striped: true,
             queryParams : function(params) {
-                return {
-                    select : $("#select").val(),
-                    eDate : $("#eDate").val(),
-                    select_status:$("#select_status").val(),
-                    roomId:$("#roomid").val()
-                };
+                params.select= $("#select").val();
+                params.eDate = $("#eDate").val();
+                params.select_status=$("#select_status").val();
+                params.roomId=$("#roomid").val();
+                params.offset=params.offset;
+                return params
             },
             search: false,
             searchOnEnterKey: true,
@@ -124,13 +124,14 @@
             showToggle:true,
             toolbar: '#toolbar',
             columns: [
+
                 {field: 'id', title: 'ID', align: 'center'},
                 {field: 'username', title: '用户名', align: 'center'},
-                {field: 'room', title: '房间ID', align: 'center'},
                 {field: 'goods', title: '商品', align: 'center'},
-                {field: 'num', title: '数量', align: 'center'},
                 {field: 'price', title: '消耗积分', align: 'center'},
                 {field: 'coin', title: '剩余积分', align: 'center'},
+                {field: 'room', title: '房间ID', align: 'center'},
+                {field: 'num', title: '数量', align: 'center'},
                 {field: 'createAt', title: '购买时间', align: 'center',formatter: 'dateFormatter'},
                 {field: 'endDate', title: '结束时间', align: 'center',formatter: 'dateFormatter'},
                 {field: 'status', title: '状态', align: 'center',formatter: 'dateFormatter2'},
@@ -182,8 +183,7 @@
             return ''
         }else{
             return [
-                '<a class="edit2 ml10" href="javascript:void(0)" data-toggle="tooltip" title="修改"><i class="glyphicon glyphicon-edit"></i>上号</a>',
-
+      
                 '<a class="edit ml10" href="javascript:void(0)" data-toggle="tooltip" title="修改"><i class="glyphicon glyphicon-edit"></i>编辑</a>',
                 ].join('');
         }
@@ -272,6 +272,7 @@
             });
         },
         'click .edit2': function (e, value, row, index) {
+          
             $.confirm({
                 title: '消息提醒',
                 content: '  是否上号',
@@ -279,10 +280,22 @@
                     confirm: {
                         text: '确定',
                         action: function () {
-                            $.alert({
-                                content:'上号成功！',
-                                title:false,
-                                closeIcon:false
+                            $.ajax({
+                                url: '/adimn/get/number_change',
+                                type: 'get',
+                                data: {Id: row.id},
+                                success: function (json) {
+                                    $.alert({
+                                        content:'上号成功！',
+                                        title:false,
+                                        closeIcon:false
+                                    });
+
+                                    $table.bootstrapTable('refresh');
+                                },
+                                error: function (error) {
+                                    console.log(error);
+                                }
                             });
 
                         }

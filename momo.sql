@@ -11,7 +11,7 @@
  Target Server Version : 50726
  File Encoding         : 65001
 
- Date: 30/05/2019 10:06:39
+ Date: 31/05/2019 09:28:23
 */
 
 SET NAMES utf8mb4;
@@ -94,8 +94,8 @@ CREATE TABLE `orders`  (
   `num` int(11) NOT NULL,
   `price` float(20, 2) NOT NULL,
   `createBy` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'noname',
-  `createAt` datetime(0) NOT NULL COMMENT '创建时间',
-  `endDate` datetime(0) NOT NULL COMMENT '结束时间',
+  `createAt` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '创建时间',
+  `endDate` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '结束时间',
   `status` int(11) NULL DEFAULT 0 COMMENT ' 0 是恢复 1是暂停',
   `remark` varchar(1000) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '备注',
   `coin` int(11) NULL DEFAULT NULL COMMENT '当时剩下积分',
@@ -105,28 +105,77 @@ CREATE TABLE `orders`  (
 -- ----------------------------
 -- Records of orders
 -- ----------------------------
-INSERT INTO `orders` VALUES ('02217417', '234532443', '陌陌 包月 250积分', 10, 2500.00, 'twdaaf0sigb6zoce', '2019-05-29 17:40:29', '2019-06-29 17:40:29', 0, '时速', 19462);
-INSERT INTO `orders` VALUES ('13128489', '1', '陌陌 包天 20积分', 1, 20.00, 'kyl3jrslc5hus6n2', '2019-05-29 16:38:01', '2019-05-30 16:38:01', 0, '', NULL);
-INSERT INTO `orders` VALUES ('24851100', '6666', '陌陌 单次 10积分', 15, 150.00, 'twdaaf0sigb6zoce', '2019-05-29 17:57:33', '2019-05-29 23:57:33', 0, '', 18112);
-INSERT INTO `orders` VALUES ('26195712', '2332233', '陌陌 包天 20积分', 1, 20.00, 'kyl3jrslc5hus6n2', '2019-05-29 16:53:47', '2019-05-30 16:53:47', 1, '我', 21642);
-INSERT INTO `orders` VALUES ('28792246', '2', '陌陌 包天 20积分', 2, 40.00, 'kyl3jrslc5hus6n2', '2019-05-29 16:52:42', '2019-05-30 16:52:42', 0, '', 28792246);
-INSERT INTO `orders` VALUES ('34551800', '8888', '陌陌 单次 10积分', 5, 50.00, 'twdaaf0sigb6zoce', '2019-05-29 17:58:14', '2019-05-29 23:58:14', 1, '', 18062);
-INSERT INTO `orders` VALUES ('36622091', '456456', '陌陌 单次 10积分', 10, 100.00, 'twdaaf0sigb6zoce', '2019-05-29 17:43:46', '2019-05-29 23:43:46', 0, '时速', 19362);
-INSERT INTO `orders` VALUES ('38020749', '222', '点赞 单次 100积分', 2, 200.00, 'kyl3jrslc5hus6n2', '2019-05-29 16:51:41', '2019-05-29 22:51:41', 1, '2222', 38020749);
-INSERT INTO `orders` VALUES ('39400716', '100', '陌陌 单次 10积分', 10, 100.00, 'twdaaf0sigb6zoce', '2019-05-29 17:44:13', '2019-05-29 23:44:13', 0, '001', 19262);
-INSERT INTO `orders` VALUES ('39570292', '21111', '陌陌 包天 20积分', 1, 20.00, '6hulyr32dx7bct2j', '2019-05-28 22:38:26', '2019-05-29 22:38:26', 1, '', NULL);
-INSERT INTO `orders` VALUES ('43504877', '1', '陌陌 半月 200积分', 2, 400.00, 'kyl3jrslc5hus6n2', '2019-05-29 17:56:43', '2019-06-13 17:56:43', 0, '', 20842);
-INSERT INTO `orders` VALUES ('50132580', '3333', '陌陌 单次 10积分', 1, 10.00, 'twdaaf0sigb6zoce', '2019-05-29 00:34:57', '2019-05-29 06:34:57', 0, '时速', NULL);
-INSERT INTO `orders` VALUES ('55579926', '33333', '陌陌派对 包月 250积分', 1, 250.00, 'twdaaf0sigb6zoce', '2019-05-29 00:34:30', '2019-06-29 00:34:30', 0, '', NULL);
-INSERT INTO `orders` VALUES ('56072234', '1', '陌陌 半月 200积分', 2, 400.00, 'kyl3jrslc5hus6n2', '2019-05-29 17:56:39', '2019-06-13 17:56:39', 0, '', 21242);
-INSERT INTO `orders` VALUES ('60054568', '110', '陌陌 包月 250积分', 1, 250.00, 'twdaaf0sigb6zoce', '2019-05-29 17:51:13', '2019-06-29 17:51:13', 0, '', 19012);
-INSERT INTO `orders` VALUES ('60145239', '33333', '陌陌 包月 250积分', 3, 750.00, 'twdaaf0sigb6zoce', '2019-05-29 17:56:19', '2019-06-29 17:56:19', 0, '', 18262);
-INSERT INTO `orders` VALUES ('70962208', '111111', '陌陌 包天 20积分', 1, 20.00, '6hulyr32dx7bct2j', '2019-05-28 22:38:28', '2019-05-29 22:38:28', 1, '1·12·', NULL);
-INSERT INTO `orders` VALUES ('72929403', '1', '关注 单次 100积分', 1, 100.00, 'kyl3jrslc5hus6n2', '2019-05-29 15:17:38', '2019-05-29 21:17:38', 0, '', NULL);
-INSERT INTO `orders` VALUES ('73608360', '2', '陌陌 包天 20积分', 1, 20.00, '6hulyr32dx7bct2j', '2019-05-28 22:38:22', '2019-05-29 22:38:23', 0, '', NULL);
-INSERT INTO `orders` VALUES ('81753171', '3222', '关注 单次 100积分', 1, 100.00, 'kyl3jrslc5hus6n2', '2019-05-29 15:17:44', '2019-05-29 21:17:44', 1, '222222', NULL);
-INSERT INTO `orders` VALUES ('87748654', '231231231231', '关注 单次 100积分', 1, 100.00, 'kyl3jrslc5hus6n2', '2019-05-29 15:17:42', '2019-05-29 21:17:42', 0, '121212312', NULL);
-INSERT INTO `orders` VALUES ('89837528', '2', '陌陌 包周 100积分', 2, 200.00, '6hulyr32dx7bct2j', '2019-05-28 23:53:46', '2019-06-04 23:53:46', 1, '', NULL);
+INSERT INTO `orders` VALUES ('04458766', '1', '陌陌 单次 10积分', 1, 10.00, '6hulyr32dx7bct2j', '1559226575000', '1559248175000', 0, '', 108320);
+INSERT INTO `orders` VALUES ('12601497', '2', '陌陌 包月 250积分', 1, 250.00, '6hulyr32dx7bct2j', '1559204083000', '1561882485000', 2, '', 8080);
+INSERT INTO `orders` VALUES ('13377895', '12', '陌陌 单次 10积分', 1, 10.00, '6hulyr32dx7bct2j', '1559201654000', '1559223254000', 0, '', 8340);
+INSERT INTO `orders` VALUES ('18812019', '2222', '视频播放量 单次 100积分', 22, 2200.00, '6hulyr32dx7bct2j', '1559265162000', '1559286762000', 2, '', 105370);
+INSERT INTO `orders` VALUES ('22608016', '231', '陌陌派对 包月 250积分', 1, 250.00, '6hulyr32dx7bct2j', '1559264829000', '1561943229000', 2, '', 107570);
+INSERT INTO `orders` VALUES ('34074435', '1', '陌陌 单次 10积分', 1, 10.00, '6hulyr32dx7bct2j', '1559200905000', '1559222506000', 0, '', 8350);
+INSERT INTO `orders` VALUES ('34248957', '21', '陌陌派对 包天 20积分', 12, 240.00, '6hulyr32dx7bct2j', '1559202935000', '1559289335000', 2, '', 8090);
+INSERT INTO `orders` VALUES ('40285729', '2', '视频播放量 单次 100积分', 22, 2200.00, '6hulyr32dx7bct2j', '1559202652000', '1559224252000', 2, '', 6120);
+INSERT INTO `orders` VALUES ('47094811', '1', '关注 单次 100积分', 22, 2200.00, '6hulyr32dx7bct2j', '1559202893000', '1559224493000', 2, '', 6130);
+INSERT INTO `orders` VALUES ('48445033', '1', '陌陌 单次 10积分', 1, 10.00, '6hulyr32dx7bct2j', '1559203050000', '1559224650000', 2, '', 8320);
+INSERT INTO `orders` VALUES ('49684429', '2', '陌陌 半月 200积分', 1, 200.00, '6hulyr32dx7bct2j', '1559264999000', '1560560999000', 2, '123123', 107370);
+INSERT INTO `orders` VALUES ('52549400', '1', '陌陌 包月 250积分', 1, 250.00, '6hulyr32dx7bct2j', '1559204341000', '1561882741000', 2, '', 8080);
+INSERT INTO `orders` VALUES ('57182923', '22559086', '陌陌 单次 10积分', 1, 10.00, 'twdaaf0sigb6zoce', '1559202057000', '1559223657000', 2, '', 17942);
+INSERT INTO `orders` VALUES ('58504717', '2', '视频播放量 单次 100积分', 22, 2200.00, '6hulyr32dx7bct2j', '1559265196000', '1559286796000', 2, '22', 105370);
+INSERT INTO `orders` VALUES ('62041582', '23', '陌陌 单次 10积分', 1, 10.00, '6hulyr32dx7bct2j', '1559208414000', '1559230014000', 2, '', 104800);
+INSERT INTO `orders` VALUES ('64934158', '2', '陌陌 包月 250积分', 2, 500.00, '6hulyr32dx7bct2j', '1559264800000', '1561943200000', 2, '不行', 107820);
+INSERT INTO `orders` VALUES ('72451402', '1', '陌陌 单次 10积分', 1, 10.00, '6hulyr32dx7bct2j', '1559265799000', '1559287399000', 0, '', 107560);
+INSERT INTO `orders` VALUES ('73334592', '4566456', '陌陌 包月 250积分', 10, 2500.00, '6hulyr32dx7bct2j', '1559206863000', '1561885263000', 2, '', 105830);
+INSERT INTO `orders` VALUES ('73464007', '111111', '陌陌 单次 10积分', 100, 1000.00, '6hulyr32dx7bct2j', '1559206992000', '1559228592000', 2, '', 104830);
+INSERT INTO `orders` VALUES ('77961997', '22', '视频播放量 单次 100积分', 22, 2200.00, '6hulyr32dx7bct2j', '1559202427000', '1559224027000', 2, '', 6110);
+INSERT INTO `orders` VALUES ('81762038', '2', '陌陌 单次 10积分', 22, 220.00, '6hulyr32dx7bct2j', '1559204537000', '1559226137000', 2, '', 8110);
+INSERT INTO `orders` VALUES ('85981846', '21', '陌陌 单次 10积分', 1, 10.00, '6hulyr32dx7bct2j', '1559201683000', '1559223283000', 2, '', 8310);
+INSERT INTO `orders` VALUES ('89536158', '1', '陌陌 包天 20积分', 1, 20.00, '6hulyr32dx7bct2j', '1559206998000', '1559293398000', 2, '', 104810);
+INSERT INTO `orders` VALUES ('93932517', '23', '陌陌 单次 10积分', 1, 10.00, '6hulyr32dx7bct2j', '1559208575000', '1559230175000', 2, '', 107290);
+INSERT INTO `orders` VALUES ('93988143', '22', '陌陌 单次 10积分', 1, 10.00, '6hulyr32dx7bct2j', '1559201662000', '1559223262000', 0, '', 8330);
+INSERT INTO `orders` VALUES ('95084816', '1', '陌陌 单次 10积分', 1, 10.00, '6hulyr32dx7bct2j', '1559199983000', '1559221608000', 0, '', 8350);
+INSERT INTO `orders` VALUES ('97354668', '2', '陌陌 单次 10积分', 1, 10.00, 'kyl3jrslc5hus6n2', '1559204578000', '1559226178000', 2, '', 20832);
+INSERT INTO `orders` VALUES ('98015239', '23', '陌陌 单次 10积分', 1, 10.00, '6hulyr32dx7bct2j', '1559201669000', '1559223269000', 2, '', 8320);
+
+-- ----------------------------
+-- Table structure for orders_delete
+-- ----------------------------
+DROP TABLE IF EXISTS `orders_delete`;
+CREATE TABLE `orders_delete`  (
+  `id` varchar(11) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '0',
+  `room` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `goods` varchar(1000) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `num` int(11) NOT NULL,
+  `price` float(20, 2) NOT NULL,
+  `createBy` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'noname',
+  `createAt` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '创建时间',
+  `endDate` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '结束时间',
+  `status` int(11) NULL DEFAULT 0 COMMENT ' 0 是恢复 1是暂停',
+  `remark` varchar(1000) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '备注',
+  `coin` int(11) NULL DEFAULT NULL COMMENT '当时剩下积分',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of orders_delete
+-- ----------------------------
+INSERT INTO `orders_delete` VALUES ('12601497', '2', '陌陌 包月 250积分', 1, 250.00, '6hulyr32dx7bct2j', '1559204083000', '1561882485000', 0, '', 8080);
+INSERT INTO `orders_delete` VALUES ('18812019', '2222', '视频播放量 单次 100积分', 22, 2200.00, '6hulyr32dx7bct2j', '1559265162000', '1559286762000', 0, '', 105370);
+INSERT INTO `orders_delete` VALUES ('34248957', '21', '陌陌派对 包天 20积分', 12, 240.00, '6hulyr32dx7bct2j', '1559202935000', '1559289335000', 0, '', 8090);
+INSERT INTO `orders_delete` VALUES ('40285729', '2', '视频播放量 单次 100积分', 22, 2200.00, '6hulyr32dx7bct2j', '1559202652000', '1559224252000', 0, '', 6120);
+INSERT INTO `orders_delete` VALUES ('47094811', '1', '关注 单次 100积分', 22, 2200.00, '6hulyr32dx7bct2j', '1559202893000', '1559224493000', 0, '', 6130);
+INSERT INTO `orders_delete` VALUES ('48445033', '1', '陌陌 单次 10积分', 1, 10.00, '6hulyr32dx7bct2j', '1559203050000', '1559224650000', 0, '', 8320);
+INSERT INTO `orders_delete` VALUES ('49684429', '2', '陌陌 半月 200积分', 1, 200.00, '6hulyr32dx7bct2j', '1559264999000', '1560560999000', 2, '123123', 107370);
+INSERT INTO `orders_delete` VALUES ('52549400', '1', '陌陌 包月 250积分', 1, 250.00, '6hulyr32dx7bct2j', '1559204341000', '1561882741000', 0, '', 8080);
+INSERT INTO `orders_delete` VALUES ('57182923', '22559086', '陌陌 单次 10积分', 1, 10.00, 'twdaaf0sigb6zoce', '1559202057000', '1559223657000', 1, '', 17942);
+INSERT INTO `orders_delete` VALUES ('58504717', '2', '视频播放量 单次 100积分', 22, 2200.00, '6hulyr32dx7bct2j', '1559265196000', '1559286796000', 2, '22', 105370);
+INSERT INTO `orders_delete` VALUES ('62041582', '23', '陌陌 单次 10积分', 1, 10.00, '6hulyr32dx7bct2j', '1559208414000', '1559230014000', 0, '', 104800);
+INSERT INTO `orders_delete` VALUES ('73334592', '4566456', '陌陌 包月 250积分', 10, 2500.00, '6hulyr32dx7bct2j', '1559206863000', '1561885263000', 0, '', 105830);
+INSERT INTO `orders_delete` VALUES ('73464007', '111111', '陌陌 单次 10积分', 100, 1000.00, '6hulyr32dx7bct2j', '1559206992000', '1559228592000', 1, '', 104830);
+INSERT INTO `orders_delete` VALUES ('77961997', '22', '视频播放量 单次 100积分', 22, 2200.00, '6hulyr32dx7bct2j', '1559202427000', '1559224027000', 0, '', 6110);
+INSERT INTO `orders_delete` VALUES ('81762038', '2', '陌陌 单次 10积分', 22, 220.00, '6hulyr32dx7bct2j', '1559204537000', '1559226137000', 0, '', 8110);
+INSERT INTO `orders_delete` VALUES ('85981846', '21', '陌陌 单次 10积分', 1, 10.00, '6hulyr32dx7bct2j', '1559201683000', '1559223283000', 0, '', 8310);
+INSERT INTO `orders_delete` VALUES ('89536158', '1', '陌陌 包天 20积分', 1, 20.00, '6hulyr32dx7bct2j', '1559206998000', '1559293398000', 0, '', 104810);
+INSERT INTO `orders_delete` VALUES ('93932517', '23', '陌陌 单次 10积分', 1, 10.00, '6hulyr32dx7bct2j', '1559208575000', '1559230175000', 0, '', 107290);
+INSERT INTO `orders_delete` VALUES ('97354668', '2', '陌陌 单次 10积分', 1, 10.00, 'kyl3jrslc5hus6n2', '1559204578000', '1559226178000', 0, '', 20832);
+INSERT INTO `orders_delete` VALUES ('98015239', '23', '陌陌 单次 10积分', 1, 10.00, '6hulyr32dx7bct2j', '1559201669000', '1559223269000', 1, '', 8320);
 
 -- ----------------------------
 -- Table structure for records
@@ -160,11 +209,15 @@ CREATE TABLE `user`  (
 -- ----------------------------
 -- Records of user
 -- ----------------------------
+INSERT INTO `user` VALUES ('5s6fcytzbbz8sow3', '123335', 'a7df7c05fa90fe66ce93a0f142741464', 'user', 0);
 INSERT INTO `user` VALUES ('5v5vmdhsikxdppv6', 'harry', 'e10adc3949ba59abbe56e057f20f883e', 'user', 0);
-INSERT INTO `user` VALUES ('6hulyr32dx7bct2j', 'admin', '21232f297a57a5a743894a0e4a801fc3', 'admin', 18540);
+INSERT INTO `user` VALUES ('6hulyr32dx7bct2j', 'admin', '21232f297a57a5a743894a0e4a801fc3', 'admin', 107560);
+INSERT INTO `user` VALUES ('7epf4iqr3mlfemfh', 'ss123', 'a3026b0a6849f749c489cd798654a809', 'user', 0);
 INSERT INTO `user` VALUES ('by3niciak9urp5wy', 'admin3', '21232f297a57a5a743894a0e4a801fc3', 'user', 0);
+INSERT INTO `user` VALUES ('h512pgl31qj1fobq', '001', 'dc5c7986daef50c1e02ab09b442ee34f', 'user', 0);
 INSERT INTO `user` VALUES ('kyl3jrslc5hus6n2', 'admin1', '21232f297a57a5a743894a0e4a801fc3', 'user', 20842);
-INSERT INTO `user` VALUES ('twdaaf0sigb6zoce', '123456', 'e10adc3949ba59abbe56e057f20f883e', 'user', 18062);
+INSERT INTO `user` VALUES ('twdaaf0sigb6zoce', '123456', 'e10adc3949ba59abbe56e057f20f883e', 'user', 17952);
 INSERT INTO `user` VALUES ('w5ov7m24iduzcrzk', '1234567', 'e10adc3949ba59abbe56e057f20f883e', 'user', 0);
+INSERT INTO `user` VALUES ('zas04vj6nlfpeenn', '5600636', '5600636', 'user', 0);
 
 SET FOREIGN_KEY_CHECKS = 1;

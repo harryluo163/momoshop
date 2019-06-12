@@ -4,7 +4,7 @@ module.exports={
     host:'47.105.36.188',
     port: 3306,
     user:'root',
-    password:'Root!!2018',
+    password:'',
     database:'momo',
     multipleStatements:true
 };

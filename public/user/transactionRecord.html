@@ -94,13 +94,13 @@
             method:'get',
             striped: true,
             queryParams : function(params) {
-             return {
-                select : $("#select").val(),
-                eDate : $("#eDate").val(),
-                roomId:$("#roomid").val()
-            };
-             },
-
+                params.select= $("#select").val();
+                params.eDate = $("#eDate").val();
+                params.select_status=$("#select_status").val();
+                params.roomId=$("#roomid").val();
+                params.offset=params.offset;
+                return params
+            },
             search: false,
             searchOnEnterKey: true,
             superSearch:false,
@@ -123,11 +123,11 @@
                
                  {field: 'id', title: 'ID', align: 'center'},
                 {field: 'username', title: '用户名', align: 'center'},
-                {field: 'room', title: '房间ID', align: 'center'},
                 {field: 'goods', title: '商品', align: 'center'},
-                {field: 'num', title: '数量', align: 'center'},
                 {field: 'price', title: '消耗积分', align: 'center'},
                 {field: 'coin', title: '剩余积分', align: 'center'},
+                {field: 'room', title: '房间ID', align: 'center'},
+                {field: 'num', title: '数量', align: 'center'},
                 {field: 'createAt', title: '购买时间', align: 'center',formatter: 'dateFormatter'},
                 {field: 'endDate', title: '结束时间', align: 'center',formatter: 'dateFormatter'},
                 {field: 'status', title: '状态', align: 'center',formatter: 'dateFormatter2'},

@@ -234,7 +234,8 @@ exports.userGetTransactionRecord=function (req,res) {
         sqlParams2+=" and ( goods like '%"+select+"%' )"
     }
     if(eDate!=""&&eDate!=undefined){
-        sqlParams2+=" and endDate <'"+eDate+" 23:59:59' "
+
+        sqlParams2+=" and endDate <'"+Date.parse(eDate +' 23:59:59')+"'";
     }
 
     if(req.query.roomId!=""&&req.query.roomId!=undefined){
