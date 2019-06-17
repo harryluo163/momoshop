@@ -99,6 +99,7 @@
                 params.select_status=$("#select_status").val();
                 params.roomId=$("#roomid").val();
                 params.offset=params.offset;
+                params.type=QueryString("type");
                 return params
             },
             search: false,
@@ -161,7 +162,6 @@
      function ntActionFormatter(value, row, index) {
           return [
 
-              '<a class="edit2 ml10" href="javascript:void(0)" data-toggle="tooltip" title="修改"><i class="glyphicon glyphicon-edit"></i>上号</a>',
               '<a class="edit ml10" href="javascript:void(0)" data-toggle="tooltip" title="修改"><i class="glyphicon glyphicon-edit">编辑</i></a>'
           ].join('');
 
@@ -229,7 +229,7 @@
                              $.ajax({
                                  url: '/user/get/transactionRecord_change',
                                  type: 'get',
-                                 data: {Id: row.id, room: groom,status: status,remark: remark},
+                                 data: {Id: row.id, room: groom,status: status,remark: remark,type:QueryString("type")},
                                  success: function (json) {
                                      $.alert({
                                          content: '修改成功！',
@@ -280,7 +280,12 @@
         return value
     }
 
-
+    function QueryString(val)
+    {
+        var uri = window.location.search;
+        var re = new RegExp("" + val + "\=([^\&\?]*)", "ig");
+        return ((uri.match(re)) ? (uri.match(re)[0].substr(val.length + 1)) : null);
+    }
     function changeId(Id){
         if($("#room"+Id).val()==""){
             alert("请填写正确房间ID")
@@ -291,7 +296,7 @@
         data: {
             newid:$("#room"+Id).val(),
             remark:$("#textarea"+Id).val(),
-            Id:Id
+            Id:Id, type:QueryString("type")
         },
         success: function(json){
                 if(json.msg=="ok"){

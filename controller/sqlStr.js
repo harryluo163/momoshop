@@ -10,7 +10,7 @@ module.exports={
     'where goodsvalue.goodsId=goods.id and goodsvalue.goodsTypeId=goodstype.id limit ?,?',
     buyGoods:'select goodsvalue.id as id,goods.name as goodsName,goodstype.type as goodsType,goodsvalue.value as goodsValue from goods,goodstype,goodsvalue ' +
     'where goodsvalue.goodsId=goods.id and goodsvalue.goodsTypeId=goodstype.id;',
-    addTransactionRecord:'insert into orders(id,room,goods,num,price,createBy,createAt,endDate,coin)values(?,?,?,?,?,?,?,?,?);',
+    addTransactionRecord:'insert into orders(id,room,goods,num,price,createBy,createAt,endDate,coin,createByUser,URL)values(?,?,?,?,?,?,?,?,?,?,?);',
     userGetTransactionRecord:'select count(*) as total from orders where createBy=?;select orders.id, orders.status, orders.remark,user.username,orders.room,orders.goods,orders.num,orders.price,orders.createAt,orders.endDate' +
     ' from orders,user where user.id=orders.createBy and orders.createBy=? ORDER BY createAt DESC limit ?,?',
     userGetTransactionRecordBySearchText:'select count(*) as total ' +

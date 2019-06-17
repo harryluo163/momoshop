@@ -103,11 +103,17 @@ exports.buyGoods=function (req,res) {
 };
 
 exports.addTransactionRecord=function (req,res) {
-    let id=req.body.id,roomId=parseInt(req.body.roomId);
+    let id=req.body.id,roomId=req.body.roomId;
+    let url =req.body.roomId;
     let createBy=req.body.userId,num=parseInt(req.body.num),gvId=parseInt(req.body.gvId);
     let createAt=utils.fortimestamp(new Date(), 'yyyy-MM-dd hh:mm:ss');
     let endDate=undefined;
     let timeType,singlePrice,goodName;
+    let type=req.body.type;
+    roomId=roomId.replace("https://","").replace(".html","")
+        .replace("https://","")
+        .replace("m.immomo.com/s/moment/new-share-v2/","")
+        .replace("m.immomo.com","");
     dbFunc.connectPool(sqlStr.goodsValue,[gvId],(err,rows)=>{
         if(err){
             res.json({error:err});
@@ -165,11 +171,24 @@ exports.addTransactionRecord=function (req,res) {
                         return;
                     }
 
-                    conn.query("select coin from user where id = '"+createBy+"'",(err,rows)=> {
+                    conn.query("select coin,username from user where id = '"+createBy+"'",(err,rows)=> {
                         let coin_my=rows[0].coin
                         let goodstr=goodName+' '+timeType+' '+singlePrice+'积分';
-                        let sqlParams=[id,roomId,goodstr,num,num*singlePrice,createBy,createAt,endDate,coin_my];
-                        conn.query(sqlStr.addTransactionRecord,sqlParams,(err,rows)=>{
+                        let sqlParams=[id,roomId,goodstr,num,num*singlePrice,createBy,createAt,endDate,coin_my,rows[0].username,url];
+                        var type=""
+                        if(goodName.indexOf("陌陌直播")>=0){
+                            type="momozhibo"
+                        }else  if(goodName.indexOf("陌陌派对")>=0){
+                            type="momopaidui"
+                        }else  if(goodName.indexOf("聊天室")>=0){
+                            type="liaotianshi"
+                        }else  if(goodName.indexOf("狼人圈")>=0){
+                            type="langrenquan"
+                        }else  if(goodName.indexOf("关注")>=0||goodName.indexOf("点赞")>=0||goodName.indexOf("播放量")>=0){
+                            type="gzdzbfl"
+                        }
+
+                        dbFunc.connectPoolOther(sqlStr.addTransactionRecord,sqlParams,type,(err,rows)=>{
                             if(err){
                                 conn.rollback(function () { });
                                 res.json({error:err});
@@ -225,8 +244,8 @@ exports.addTransactionRecord=function (req,res) {
 
 exports.userGetTransactionRecord=function (req,res) {
     let offset=parseInt(req.query.offset==undefined?0:req.query.offset),limit=parseInt(req.query.limit==undefined?10:req.query.limit),userId=req.query.id,select=req.query.select,eDate=req.query.eDate;
-   
-    var sqlParams2=" and 1=1 "
+    var sqlParams2="  1=1 "
+
     if(userId!=""&&userId!=undefined){
         sqlParams2+=" and orders.createBy= '"+userId+"' "
     }
@@ -235,7 +254,7 @@ exports.userGetTransactionRecord=function (req,res) {
     }
     if(eDate!=""&&eDate!=undefined){
 
-        sqlParams2+=" and endDate <'"+Date.parse(eDate +' 23:59:59')+"'";
+        sqlParams2+=" and endDate <'"+Date.parse(eDate +' 23:59:59')+"' and endDate >'"+Date.parse(eDate +' 00:00:00')+"'";
     }
 
     if(req.query.roomId!=""&&req.query.roomId!=undefined){
@@ -246,9 +265,11 @@ exports.userGetTransactionRecord=function (req,res) {
     }
     let sqlParams=[offset,limit];
     var sql ='select count(*) as total ' +
-    ' from orders,user where user.id=orders.createBy    '+sqlParams2+' ;select orders.id,orders.status,orders.remark, orders.coin,user.username,orders.room,orders.goods,orders.num,orders.price,orders.createAt,orders.endDate' +
-    ' from orders,user where user.id=orders.createBy   '+sqlParams2+' ORDER BY createAt DESC limit ?,?'
-    dbFunc.connectPool(sql, sqlParams, (err, rows) => {
+    ' from orders where    '+sqlParams2+' ;select orders.id,orders.status,orders.remark, orders.coin,createByUser username,orders.room,orders.goods,orders.num,orders.price,orders.createAt,orders.endDate' +
+    ' from orders where    '+sqlParams2+' ORDER BY createAt DESC limit ?,?'
+
+
+    dbFunc.connectPoolOther(sql, sqlParams,req.query.type, (err, rows) => {
 
         if (err) {
             res.json({});
@@ -259,7 +280,12 @@ exports.userGetTransactionRecord=function (req,res) {
 };
 
 exports.userGetTransactionRecord_change=function (req,res) {
-    dbFunc.connectPool("update orders set status =?,remark=?,room=? where id=?",[req.query.status,req.query.remark,req.query.room,req.query.Id],(err,rows)=>{
+    roomId =req.query.room;
+    roomId=roomId.replace("https://","").replace(".html","")
+        .replace("https://","")
+        .replace("m.immomo.com/s/moment/new-share-v2/","")
+        .replace("m.immomo.com","");
+    dbFunc.connectPoolOther("update orders set status =?,remark=?,room=? where id=?",[req.query.status,req.query.remark,roomId,req.query.Id],req.query.type,(err,rows)=>{
         if(err){
             res.json({msg:"err"});
             return;

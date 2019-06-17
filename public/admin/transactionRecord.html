@@ -103,6 +103,7 @@
                 params.select_status=$("#select_status").val();
                 params.roomId=$("#roomid").val();
                 params.offset=params.offset;
+                params.type=QueryString("type");
                 return params
             },
             search: false,
@@ -130,7 +131,7 @@
                 {field: 'goods', title: '商品', align: 'center'},
                 {field: 'price', title: '消耗积分', align: 'center'},
                 {field: 'coin', title: '剩余积分', align: 'center'},
-                {field: 'room', title: '房间ID', align: 'center'},
+                {field: 'room', title: '房间ID/编号', align: 'center'},
                 {field: 'num', title: '数量', align: 'center'},
                 {field: 'createAt', title: '购买时间', align: 'center',formatter: 'dateFormatter'},
                 {field: 'endDate', title: '结束时间', align: 'center',formatter: 'dateFormatter'},
@@ -250,7 +251,7 @@
                             $.ajax({
                                 url: '/user/get/transactionRecord_change',
                                 type: 'get',
-                                data: {Id: row.id, room: groom,status: status,remark: remark},
+                                data: {Id: row.id, room: groom,status: status,remark: remark,type:QueryString("type")},
                                 success: function (json) {
                                     $.alert({
                                         content: '修改成功！',
@@ -283,7 +284,7 @@
                             $.ajax({
                                 url: '/adimn/get/number_change',
                                 type: 'get',
-                                data: {Id: row.id},
+                                data: {Id: row.id,type:QueryString("type")},
                                 success: function (json) {
                                     $.alert({
                                         content:'上号成功！',
@@ -310,7 +311,7 @@
             $.ajax({
                 url: '/admin/cancel/order',
                 type: 'POST',
-                data: {orderId:row.id},
+                data: {orderId:row.id,type:QueryString("type")},
                 success: function(json){
                     if(json.error){
                         $.alert({
@@ -333,6 +334,13 @@
             });
         }
     };
+
+     function QueryString(val)
+    {
+        var uri = window.location.search;
+        var re = new RegExp("" + val + "\=([^\&\?]*)", "ig");
+        return ((uri.match(re)) ? (uri.match(re)[0].substr(val.length + 1)) : null);
+    }
 </script>
 </body>
 </html>

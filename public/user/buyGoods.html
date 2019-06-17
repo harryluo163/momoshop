@@ -34,7 +34,7 @@
     }
     .mroom{
         margin-top: 4px;
-        max-width: 300px;
+        max-width: 400px;
         margin-left: 21px;
     }
     .panel-body{
@@ -57,10 +57,38 @@
     <div class="panel panel-default" style="    margin-bottom: 10px;">
         <div class="panel-heading">选择您需要的商品，然后购买</div>
         <div class="input-group mroom">
-            <span class="input-group-addon" >请输入要充值的房间ID：</span>
+            <span class="input-group-addon" >请输入要充值的房间ID或视频URl：</span>
             <input type="text" class="form-control" id="room-id">
         </div>
-        <div class="panel-body" id="buygg" style="    padding: 4px;">
+    </div>
+    <div class="panel panel-default" style="    margin-bottom: 10px;">
+        <div class="panel-heading">陌陌直播</div>
+        <div class="panel-body" id="buygg1" style="    padding: 4px;">
+        </div>
+    </div>
+    <div class="panel panel-default" style="    margin-bottom: 10px;">
+        <div class="panel-heading">陌陌派对</div>
+        <div class="panel-body" id="buygg2" style="    padding: 4px;">
+        </div>
+    </div>
+    <div class="panel panel-default" style="    margin-bottom: 10px;">
+        <div class="panel-heading">聊天室</div>
+        <div class="panel-body" id="buygg3" style="    padding: 4px;">
+        </div>
+    </div>
+    <div class="panel panel-default" style="    margin-bottom: 10px;">
+        <div class="panel-heading">狼人圈</div>
+        <div class="panel-body" id="buygg4" style="    padding: 4px;">
+        </div>
+    </div>
+    <div class="panel panel-default" style="    margin-bottom: 10px;">
+        <div class="panel-heading">关注 点赞 播放量</div>
+        <div class="panel-body" id="buygg5" style="    padding: 4px;">
+        </div>
+    </div>
+    <div class="panel panel-default buygg6" style="    margin-bottom: 10px;">
+        <div class="panel-heading">其他</div>
+        <div class="panel-body" id="buygg6" style="    padding: 4px;">
         </div>
     </div>
     <div class="row" style="margin-left: 10px">
@@ -124,16 +152,34 @@
             success: function (data) {
                 allGoods=data.rows;
                 $("#current-coin").text(data.coin)
+
                 data.rows.forEach(function (goods) {
-                    $('#buygg').append('<div class="col-xs-12 col-sm-6 col-md-4 mtb">\n' +
+                    var  html='<div class="col-xs-12 col-sm-6 col-md-4 mtb">\n' +
                         '                <div class="input-group">\n' +
                         '                    <span class="input-group-addon">\n' +
                         '                        <input type="radio" name="abc" onclick="radioClick(this)">\n' +
                         '                    </span>\n' +
                         '                    <input type="text" class="form-control" readonly value=\"' + goods.goodsName + ' ' + goods.goodsType + ' ' + goods.goodsValue +' '+"积分"+ '\">\n' +
                         '                </div>\n' +
-                        '            </div>');
+                        '            </div>'
+                    if(goods.goodsName.indexOf("陌陌直播")>=0){
+                        $("#buygg1").append(html)
+                    }else  if(goods.goodsName.indexOf("陌陌派对")>=0){
+                        $("#buygg2").append(html)
+                    }else  if(goods.goodsName.indexOf("聊天室")>=0){
+                        $("#buygg3").append(html)
+                    }else  if(goods.goodsName.indexOf("狼人圈")>=0){
+                        $("#buygg4").append(html)
+                    }else  if(goods.goodsName.indexOf("关注")>=0||goods.goodsName.indexOf("点赞")>=0||goods.goodsName.indexOf("播放量")>=0){
+                        $("#buygg5").append(html)
+                    }else  {
+                        $("#buygg6").append(html)
+                    }
+
                 })
+                if( $("#buygg6").html().trim()==""){
+                    $(".buygg6").css("display","none")
+                }
             },
             error: function (error) {
                 $('#buygg').append('<p><h4>产品为空......</h4></p>');
@@ -185,14 +231,7 @@
                     });
                     return ;
                 }
-                if(isNaN(roomId)){
-                    $.alert({
-                        content:'输入要充值的房间ID有错误，请重新输入！',
-                        title:false,
-                        closeIcon:false
-                    });
-                    return ;
-                }
+
 
                 if (goods_num < 1) {
                     $.alert({
